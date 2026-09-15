@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "Health Tracker",
+    "slug": "health-tracker",
+    "scheme": "healthtracker",
+    "version": "0.2.1",
+    "icon": "./assets/icon.png",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Cho phép Health Tracker chọn ảnh tài liệu y tế từ thư viện.",
+          "cameraPermission": "Cho phép Health Tracker chụp ảnh tài liệu y tế.",
+          "microphonePermission": false
+        }
+      ],
+      "expo-document-picker",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Cho phép Health Tracker dùng Face ID để bảo vệ hồ sơ sức khỏe trên thiết bị."
+        }
+      ],
+      "expo-notifications",
+      [
+        "expo-sqlite",
+        {
+          "useSQLCipher": true
+        }
+      ],
+      "expo-secure-store",
+      "expo-sharing"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.vovannieu.healthtracker",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.vovannieu.healthtracker"
+    },
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
