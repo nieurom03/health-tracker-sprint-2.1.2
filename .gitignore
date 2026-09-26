@@ -6,3 +6,4 @@ expo-env.d.ts
 .expo/
 # @end expo-cli
 node_modules/
+ios/

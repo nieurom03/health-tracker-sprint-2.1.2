@@ -26,7 +26,7 @@ import {
   setSetting,
 } from "@/database/repositories/settingsRepository";
 import type { Patient } from "@/types/health";
-import { createEncryptedBackup, pickAndRestoreBackup } from "@/utils/backup";
+import { createBackup, pickAndRestoreBackup } from "@/utils/backup";
 import AppIcon from "@/components/AppIcon";
 
 const featureLinks = [
@@ -65,6 +65,7 @@ export default function MoreScreen() {
   const [timeout, setTimeoutValue] = useState("60");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [backupWithoutPassword, setBackupWithoutPassword] = useState(false);
   const [busy, setBusy] = useState("");
 
   const load = useCallback(async () => {
@@ -118,6 +119,7 @@ export default function MoreScreen() {
   }
 
   function validPassword() {
+    if (backupWithoutPassword) return true;
     if (password.length < 8) {
       Alert.alert(
         "Mật khẩu quá ngắn",
@@ -136,10 +138,12 @@ export default function MoreScreen() {
     if (!validPassword()) return;
     setBusy("backup");
     try {
-      await createEncryptedBackup(db, password);
+      await createBackup(db, backupWithoutPassword ? undefined : password);
       Alert.alert(
         "Đã tạo backup",
-        "File backup được mã hóa bằng mật khẩu bạn vừa nhập. Hãy cất mật khẩu riêng vì ứng dụng không thể khôi phục nếu quên.",
+        backupWithoutPassword
+          ? "File backup không có mật khẩu và không được mã hóa bằng password. Hãy lưu ở nơi an toàn."
+          : "File backup được mã hóa bằng mật khẩu bạn vừa nhập. Hãy cất mật khẩu riêng vì ứng dụng không thể khôi phục nếu quên.",
       );
     } catch (e) {
       Alert.alert(
@@ -164,7 +168,10 @@ export default function MoreScreen() {
           onPress: async () => {
             setBusy("restore");
             try {
-              const done = await pickAndRestoreBackup(db, password);
+              const done = await pickAndRestoreBackup(
+                db,
+                backupWithoutPassword ? undefined : password,
+              );
               if (done) {
                 await load();
                 Alert.alert(
@@ -289,6 +296,7 @@ export default function MoreScreen() {
             placeholderTextColor="#94A3B8"
             secureTextEntry
             autoCapitalize="none"
+            editable={!backupWithoutPassword}
           />
           <TextInput
             style={s.input}
@@ -298,7 +306,21 @@ export default function MoreScreen() {
             placeholderTextColor="#94A3B8"
             secureTextEntry
             autoCapitalize="none"
+            editable={!backupWithoutPassword}
           />
+          <View style={s.switchRow}>
+            <View style={s.linkBody}>
+              <Text style={s.linkTitle}>Backup không mật khẩu</Text>
+              <Text style={s.desc}>
+                File dễ mở hơn nhưng không có lớp mã hóa bằng password.
+              </Text>
+            </View>
+            <Switch
+              value={backupWithoutPassword}
+              onValueChange={setBackupWithoutPassword}
+              trackColor={{ true: "#FCA5A5" }}
+            />
+          </View>
           <View style={s.buttons}>
             <Pressable style={s.primary} onPress={backup} disabled={!!busy}>
               {busy === "backup" ? (

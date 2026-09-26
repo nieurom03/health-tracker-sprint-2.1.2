@@ -44,14 +44,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.vovannieu.healthtracker",
+      "bundleIdentifier": "com.vovannieu.healthtracker.s1",
       "config": {
         "usesNonExemptEncryption": false
       },
       "appleTeamId": "7JFZ6BA92Y"
     },
     "android": {
-      "package": "com.vovannieu.healthtracker",
+      "package": "com.vovannieu.healthtracker.s1",
       "permissions": [
         "android.permission.USE_BIOMETRIC",
         "android.permission.USE_FINGERPRINT"
