@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
@@ -12,6 +13,7 @@ export default function DocumentDateField({
   value: Date | null;
   onChange: (date: Date | null) => void;
 }) {
+  const styles = useThemedStyles(baseStyles);
   const [showIos, setShowIos] = useState(false);
   const pickerValue = value ?? new Date();
 
@@ -58,7 +60,7 @@ export default function DocumentDateField({
   );
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   box: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 16, padding: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   caption: { fontSize: 10, fontWeight: '900', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 0.5 },
   value: { fontSize: 15, fontWeight: '800', color: '#0F172A', marginTop: 4, textTransform: 'capitalize' },

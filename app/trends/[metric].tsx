@@ -1,35 +1,36 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useCallback, useMemo, useState } from "react";
-import {
-  Dimensions,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import TrendChart from "@/components/TrendChart";
 import EmptyState from "@/components/EmptyState";
+import GlassCard from "@/components/GlassCard";
+import AmbientBackground from "@/components/AmbientBackground";
 import { getMetricHistory } from "@/database/repositories/metricRepository";
 import type { MetricPoint } from "@/types/health";
 import { formatDateTime, formatMetricValue } from "@/utils/format";
+
 export default function TrendScreen() {
+  const styles = useThemedStyles(baseStyles);
   const { metric, patientId } = useLocalSearchParams<{
     metric: string;
     patientId: string;
   }>();
   const db = useSQLiteContext();
   const [data, setData] = useState<MetricPoint[]>([]);
+
   const load = useCallback(async () => {
     if (metric && patientId)
       setData(await getMetricHistory(db, Number(patientId), metric));
   }, [db, metric, patientId]);
+
   useFocusEffect(
     useCallback(() => {
       load();
     }, [load]),
   );
+
   const latest = data.at(-1);
   const previous = data.length > 1 ? data.at(-2) : undefined;
   const delta = useMemo(
@@ -42,20 +43,25 @@ export default function TrendScreen() {
     [delta, previous],
   );
   const width = Math.min(Dimensions.get("window").width - 36, 430);
+
   if (!latest)
     return (
       <View style={styles.container}>
+        <AmbientBackground />
         <EmptyState
           title="Chưa có dữ liệu"
           text="Cần ít nhất một lần đo để hiển thị xu hướng."
         />
       </View>
     );
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <AmbientBackground />
       <Text style={styles.overline}>TREND</Text>
       <Text style={styles.metric}>{latest.metric_name}</Text>
-      <View style={styles.latest}>
+
+      <GlassCard variant="darkHero" style={styles.latest} borderRadius={24}>
         <View>
           <Text style={styles.latestLabel}>MỚI NHẤT</Text>
           <View style={styles.latestRow}>
@@ -86,19 +92,22 @@ export default function TrendScreen() {
             )}
           </View>
         )}
-      </View>
-      <View style={styles.chart}>
+      </GlassCard>
+
+      <GlassCard style={styles.chart} borderRadius={20}>
         <View style={styles.chartHeader}>
           <Text style={styles.chartTitle}>Biến động theo thời gian</Text>
           <Text style={styles.count}>{data.length} lần đo</Text>
         </View>
         <TrendChart data={data} width={width - 32} />
-      </View>
+      </GlassCard>
+
       <Text style={styles.heading}>Lịch sử</Text>
       {[...data].reverse().map((x) => (
-        <Pressable
+        <GlassCard
           key={`${x.source}-${x.id}`}
           style={styles.row}
+          borderRadius={14}
           onPress={() =>
             router.push({
               pathname: "/records/[source]/[id]",
@@ -120,8 +129,9 @@ export default function TrendScreen() {
             </Text>
             <Text style={styles.edit}>Sửa ›</Text>
           </View>
-        </Pressable>
+        </GlassCard>
       ))}
+
       <Text style={styles.notice}>
         Biểu đồ chỉ thể hiện xu hướng của dữ liệu đã nhập và không thay thế đánh
         giá hoặc chẩn đoán của nhân viên y tế.
@@ -129,7 +139,8 @@ export default function TrendScreen() {
     </ScrollView>
   );
 }
-const styles = StyleSheet.create({
+
+const baseStyles = StyleSheet.create({
   container: {
     padding: 18,
     paddingBottom: 44,
@@ -145,9 +156,7 @@ const styles = StyleSheet.create({
   },
   metric: { fontSize: 25, fontWeight: "900", color: "#0F172A", marginTop: -6 },
   latest: {
-    backgroundColor: "#0F172A",
     padding: 21,
-    borderRadius: 24,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -170,11 +179,7 @@ const styles = StyleSheet.create({
   delta: { fontWeight: "900", fontSize: 14 },
   percent: { color: "#94A3B8", fontSize: 11, fontWeight: "800", marginTop: 3 },
   chart: {
-    backgroundColor: "#fff",
     padding: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
     alignItems: "center",
   },
   chartHeader: {
@@ -186,25 +191,21 @@ const styles = StyleSheet.create({
   count: { fontSize: 10, color: "#94A3B8", fontWeight: "800" },
   heading: { fontSize: 18, fontWeight: "900", color: "#0F172A", marginTop: 4 },
   row: {
-    backgroundColor: "#fff",
     padding: 14,
-    borderRadius: 14,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
   },
   date: { color: "#64748B", fontSize: 12, fontWeight: "700" },
   notes: { color: "#94A3B8", fontSize: 10, marginTop: 3, maxWidth: 190 },
   historyRight: { alignItems: "flex-end" },
-  value: { fontWeight: "900", color: "#0F172A" },
-  edit: { fontSize: 10, color: "#2563EB", fontWeight: "900", marginTop: 3 },
+  value: { fontSize: 15, fontWeight: "900", color: "#0F172A" },
+  edit: { color: "#2563EB", fontWeight: "800", fontSize: 11, marginTop: 4 },
   notice: {
-    fontSize: 10,
+    fontSize: 11,
     color: "#94A3B8",
     lineHeight: 16,
-    marginTop: 8,
     textAlign: "center",
+    marginTop: 8,
   },
 });

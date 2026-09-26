@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -51,6 +52,7 @@ function documentDate(item: HealthDocument, detectedDate: string | null) {
 }
 
 export default function MedicalReviewScreen() {
+  const styles = useThemedStyles(baseStyles);
   const { id } = useLocalSearchParams<{ id: string }>();
   const documentId = Number(id);
   const db = useSQLiteContext();
@@ -176,7 +178,9 @@ export default function MedicalReviewScreen() {
           unit: draft.unit.trim(),
           referenceMin: optionalNumber(draft.referenceMinText),
           referenceMax: optionalNumber(draft.referenceMaxText),
+          referenceText: draft.referenceText ?? undefined,
           notes: `Tự động từ tài liệu: ${item.file_name}`,
+          sourceLine: draft.sourceLine,
         })),
       });
       allowLeave.current = true;
@@ -305,6 +309,7 @@ export default function MedicalReviewScreen() {
                     <View style={styles.fieldGrow}><Text style={styles.fieldLabel}>THAM CHIẾU TỪ</Text><TextInput style={styles.input} keyboardType="decimal-pad" value={draft.referenceMinText} onChangeText={(referenceMinText) => updateDraft(index, { referenceMinText })} placeholder="—" /></View>
                     <View style={styles.fieldGrow}><Text style={styles.fieldLabel}>ĐẾN</Text><TextInput style={styles.input} keyboardType="decimal-pad" value={draft.referenceMaxText} onChangeText={(referenceMaxText) => updateDraft(index, { referenceMaxText })} placeholder="—" /></View>
                   </View>
+                  {draft.referenceText && <Text style={styles.referenceSource}>Tham chiếu OCR: {draft.referenceText}</Text>}
                   <Text style={styles.sourceLine} numberOfLines={3}>OCR: {draft.sourceLine}</Text>
                   {draft.converted && <Text style={styles.converted}>Đã quy đổi từ {draft.rawValue} {draft.rawUnit}</Text>}
                 </View>
@@ -325,7 +330,7 @@ export default function MedicalReviewScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: "#F8FAFC" },
   container: { padding: 18, paddingBottom: 52, gap: 13 },
   cancelText: { color: "#2563EB", fontSize: 15, fontWeight: "800" },
@@ -365,6 +370,7 @@ const styles = StyleSheet.create({
   fieldGrow: { flex: 1 },
   fieldLabel: { color: "#94A3B8", fontSize: 8, fontWeight: "900", marginBottom: 4 },
   input: { minHeight: 43, backgroundColor: "#F8FAFC", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 11, paddingHorizontal: 11, color: "#0F172A", fontSize: 13, fontWeight: "800" },
+  referenceSource: { color: "#1D4ED8", backgroundColor: "#EFF6FF", borderRadius: 9, padding: 9, fontSize: 10, lineHeight: 14 },
   sourceLine: { color: "#64748B", backgroundColor: "#F8FAFC", borderRadius: 9, padding: 9, fontSize: 9, lineHeight: 14 },
   converted: { color: "#0369A1", fontSize: 9, fontWeight: "800" },
   warningCard: { backgroundColor: "#FFFBEB", borderWidth: 1, borderColor: "#FDE68A", borderRadius: 15, padding: 13 },

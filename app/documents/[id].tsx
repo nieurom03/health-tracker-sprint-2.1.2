@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useCallback, useState } from "react";
 import {
   ActivityIndicator,
@@ -53,6 +54,7 @@ function toLocalDate(value: Date | null) {
 }
 
 export default function DocumentDetailScreen() {
+  const styles = useThemedStyles(baseStyles);
   const { id } = useLocalSearchParams<{ id: string }>();
   const documentId = Number(id);
   const db = useSQLiteContext();
@@ -428,7 +430,7 @@ export default function DocumentDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   flex: { flex: 1 },
   center: {
     flex: 1,

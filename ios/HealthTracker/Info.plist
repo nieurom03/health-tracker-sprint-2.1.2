@@ -19,7 +19,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>0.2.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -34,6 +34,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSMinimumSystemVersion</key>
 	<string>12.0</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -48,7 +50,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Cho phép Health Tracker chụp ảnh tài liệu y tế.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Cho phép Health Tracker dùng Face ID để bảo vệ dữ liệu sức khỏe của bạn.</string>
+	<string>Cho phép Health Tracker dùng Face ID để bảo vệ hồ sơ sức khỏe trên thiết bị.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Cho phép Health Tracker chọn ảnh tài liệu y tế từ thư viện.</string>
 	<key>NSUserActivityTypes</key>
@@ -59,6 +61,23 @@
 	<string>$(RCT_METRO_PORT)</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>EXExpoAppSceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

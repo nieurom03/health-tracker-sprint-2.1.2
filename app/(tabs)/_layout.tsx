@@ -1,15 +1,102 @@
+import { Platform, StyleSheet, View } from "react-native";
 import { Tabs } from "expo-router";
-import { Platform } from "react-native";
+import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { BlurView } from "expo-blur";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AppIcon from "@/components/AppIcon";
+import { useTheme } from "@/hooks/useTheme";
 
-export default function TabLayout() {
+function IOSLiquidGlassTabs() {
+  const { colors, isDark } = useTheme();
+
+  const inactiveColor = isDark
+    ? "rgba(255, 255, 255, 0.72)"
+    : "rgba(71, 85, 105, 0.65)";
+
+  return (
+    <NativeTabs
+      tintColor={colors.accent}
+      iconColor={{
+        default: inactiveColor,
+        selected: colors.accent,
+      }}
+      labelStyle={{
+        default: { color: inactiveColor },
+        selected: { color: colors.accent },
+      }}
+      backgroundColor={
+        isDark ? "rgba(15, 23, 42, 0.22)" : "rgba(255, 255, 255, 0.12)"
+      }
+      blurEffect={
+        isDark ? "systemUltraThinMaterialDark" : "systemUltraThinMaterialLight"
+      }
+      minimizeBehavior="never"
+      sidebarAdaptable={false}
+      unstable_nativeProps={{
+        colorScheme: isDark ? "dark" : "light",
+      }}
+    >
+      <NativeTabs.Trigger name="index">
+        <NativeTabs.Trigger.Icon
+          sf={{
+            default: "heart.text.clipboard",
+            selected: "heart.text.clipboard.fill",
+          }}
+        />
+        <NativeTabs.Trigger.Label>Sức khỏe</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="timeline">
+        <NativeTabs.Trigger.Icon sf="clock.arrow.circlepath" />
+        <NativeTabs.Trigger.Label>Timeline</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="patients">
+        <NativeTabs.Trigger.Icon
+          sf={{
+            default: "person.2",
+            selected: "person.2.fill",
+          }}
+        />
+        <NativeTabs.Trigger.Label>Bệnh nhân</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="documents">
+        <NativeTabs.Trigger.Icon
+          sf={{
+            default: "doc.text",
+            selected: "doc.text.fill",
+          }}
+        />
+        <NativeTabs.Trigger.Label>Tài liệu</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="more">
+        <NativeTabs.Trigger.Icon
+          sf={{
+            default: "ellipsis.circle",
+            selected: "ellipsis.circle.fill",
+          }}
+        />
+        <NativeTabs.Trigger.Label>Thêm</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+    </NativeTabs>
+  );
+}
+
+function FallbackTabs() {
+  const { colors, isDark } = useTheme();
   const insets = useSafeAreaInsets();
+
+  const inactiveColor = isDark
+    ? "rgba(255, 255, 255, 0.72)"
+    : "rgba(100, 116, 139, 0.85)";
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#34D399",
-        tabBarInactiveTintColor: "#FFFFFF",
+        tabBarActiveTintColor: colors.accent,
+        tabBarInactiveTintColor: inactiveColor,
         tabBarHideOnKeyboard: true,
         headerTitleStyle: { fontWeight: "900" },
         tabBarLabelStyle: { fontSize: 11, fontWeight: "800", marginTop: 2 },
@@ -26,14 +113,38 @@ export default function TabLayout() {
           paddingBottom: 0,
           borderRadius: 38,
           borderTopWidth: 0,
-          backgroundColor: "#737C79",
+          backgroundColor: isDark
+            ? "rgba(15, 23, 42, 0.65)"
+            : "rgba(255, 255, 255, 0.65)",
+          borderWidth: 1,
+          borderColor: isDark
+            ? "rgba(255, 255, 255, 0.15)"
+            : "rgba(255, 255, 255, 0.65)",
           shadowColor: "#0F172A",
-          shadowOpacity: 0.2,
-          shadowRadius: 14,
-          shadowOffset: { width: 0, height: 7 },
+          shadowOpacity: 0.15,
+          shadowRadius: 16,
+          shadowOffset: { width: 0, height: 8 },
           elevation: 12,
-          overflow: Platform.OS === "android" ? "hidden" : "visible",
+          overflow: "hidden",
         },
+        tabBarBackground: () => (
+          <BlurView
+            intensity={55}
+            tint={isDark ? "dark" : "light"}
+            style={StyleSheet.absoluteFill}
+          >
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                {
+                  backgroundColor: isDark
+                    ? "rgba(15, 23, 42, 0.25)"
+                    : "rgba(255, 255, 255, 0.20)",
+                },
+              ]}
+            />
+          </BlurView>
+        ),
       }}
     >
       <Tabs.Screen
@@ -70,6 +181,7 @@ export default function TabLayout() {
         name="patients"
         options={{
           title: "Bệnh nhân",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <AppIcon
               ios="person.2.fill"
@@ -80,7 +192,6 @@ export default function TabLayout() {
           ),
         }}
       />
-
       <Tabs.Screen
         name="documents"
         options={{
@@ -113,4 +224,8 @@ export default function TabLayout() {
       />
     </Tabs>
   );
+}
+
+export default function TabLayout() {
+  return Platform.OS === "ios" ? <IOSLiquidGlassTabs /> : <FallbackTabs />;
 }

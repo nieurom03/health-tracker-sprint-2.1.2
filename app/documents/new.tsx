@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
@@ -30,6 +31,7 @@ function formatSize(size?: number) {
 }
 
 export default function NewDocumentScreen() {
+  const styles = useThemedStyles(baseStyles);
   const db = useSQLiteContext();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [patientId, setPatientId] = useState<number | null>(null);
@@ -162,7 +164,7 @@ export default function NewDocumentScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   container: { padding: 18, paddingBottom: 44, gap: 10, backgroundColor: '#F8FAFC', minHeight: '100%' },
   center: { flex: 1, justifyContent: 'center', padding: 24, gap: 12, backgroundColor: '#F8FAFC' },
   emptyTitle: { fontSize: 22, fontWeight: '900', color: '#0F172A', textAlign: 'center' },

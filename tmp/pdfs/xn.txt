@@ -1,0 +1,400 @@
+              BỆNH VIỆN ĐẠI HỌC Y DƯỢC TPHCM
+              (UNIVERSITY MEDICAL CENTER HCMC )
+              215 Hồng Bàng, Phường Chợ Lớn, TP. Hồ Chí Minh
+              (215 Hong Bang Street, Cho Lon Ward, Ho Chi Minh City)
+                                                                         KẾT QUẢ XÉT NGHIỆM
+              ĐT: 028-38554269
+              (Phone: 028-38554269)
+                                                                                   Laboratory Report
+                                                                     Mã số :             260926-0448
+                A11-0028860                                          (Sample ID)
+
+ Ông/Bà :              VÕ THANH PHONG                                         Ngày sinh: 01/01/1952 Giới tính : Nam/Male
+ (Patient's full name)
+ Địa chỉ :
+ (Address)
+                       Kp Bàu Sậy, Xã Vĩnh Hưng, Tây Ninh
+                                                                              (DOB)                      (Gender)
+                                                                                                                    Passport no:
+                                                                                                                                       HC
+                                                                                                         Quốc tịch(Nationality): Việt Nam/Vietnamese
+ Số hồ sơ:             A11-0028860
+ (Medical record number)
+ Nơi gửi :
+ (Unit)
+                       VIÊM GAN
+                                                       Số nhập viện:                                       Số phiếu:
+                                                                                                           (Receipt number)
+                                                                                                           BS Chỉ định :
+                                                                                                                                          M
+                                                                                                                              DH260926-0113
+
+                                                                                                                              Võ Thị Lương Trân
+                                                                                                           (Referring physician)
+ Bệnh phẩm:
+ (Specimens)
+ Chẩn đoán :
+                       Máu (Blood)
+                                                                                                                        TP
+                                                                                                           Chất lượng mẫu: Đạt (Passed)
+                                                                                                           (Specimens quality)
+                       VIÊM GAN VIRUS B MẠN, HBEAG ÂM (B18.1) / RỐI LOẠN CHUYỂN HÓA MỠ (E78), GAN NHIỄM MỠ (K76.0)         .
+ (Diagnosis)
+ Xác nhận:             05:26:40 ngày 26/09/2026, Lấy mẫu: 05:37:29 ngày 26/09/2026. Nhân viên lấy mẫu: Nguyễn Thu Tâm
+ (Received order time)                                    (Collecting time)
+
+                                                                                             DƯ         (Collecting staff)
+                                                         Nhận mẫu: 05:42:14 ngày 26/09/2026 NV nhận mẫu: Nguyễn Thái Phương Thư
+                                                          (Receiving time)                              (Receiving staff)
+
+
+
+
+      XN SINH HÓA
+                           Xét nghiệm
+                             (Test)
+                                                                            Kết quả
+                                                                           (Results)           ỢCĐơn vị
+                                                                                                 (Units)
+                                                                                                                   Khoảng tham chiếu
+                                                                                                                     (Ref. ranges)
+                                                                                                                                                  Số qui trình
+                                                                                                                                                  (Procedure)
+
+      (BIOCHEMISTRY)
+
+  Định lượng Glucose [Máu] (Đường máu lúc đói)                                  5.2              mmol/L                3.9- 5.5 mmol/L        14-SH/QTKT-XN**
+  .        Glucose                                                              94    Y          mg/dL                  70 - 99 mg/dL
+                                                                                                                Nam: 74 - 114; Nữ: 58 – 96
+  Creatinine
+
+  . Creatinine
+                                                                       ỌC     100.1
+
+                                                                               1.13
+                                                                                                 umol/L
+
+                                                                                                 mg/dL
+                                                                                                                         umol/L
+                                                                                                                Nam: 0.83-1.28; Nữ: 0.66-
+                                                                                                                       1.09 mg/dL
+                                                                                                                                           02-SH/QTKT-XN**
+
+
+
+  .        eGFR (CKD-EPI 2021)                                                 68 *              mL/phút            >= 90 mL/ph/1.73 m2
+
+  Định lượng Acid Uric [Máu]                             IH                    378               umol/L
+                                                                                                                  Nam: 208– 428 umol/L;
+                                                                                                                  Nữ: 154 – 357 umol/L
+                                                                                                                 Nam: 3.5 - 7.2 mg/dL; Nữ:
+                                                                                                                                           03-SH/QTKT-XN**
+
+  .        Uric acid                                                           6.36              mg/dL
+
+  Cholesterol
+  .        Cholesterol
+                                             ĐẠ                               3.27 *
+                                                                              126 *
+                                                                                                 mmol/L
+                                                                                                 mg/dL
+                                                                                                                     2.6 - 6.0 mg/dL
+                                                                                                                        3.9-5.2mmol/L
+                                                                                                                       150- 200 mg/dL
+                                                                                                                                              04-SH/QTKT-XN**
+
+
+  HDL Cholesterol                                                              0.93              mmol/L                 > 0.9 mmol/L          05-SH/QTKT-XN**
+  .        HDL Cholesterol
+  Non - HDL Cholesterol
+                              ỆN                                                36
+                                                                               2.34
+                                                                                                 mg/dL
+                                                                                                 mmol/L
+                                                                                                                         > 35 mg/dL
+                                                                                                                                   .
+  .
+                     VI
+           Non - HDL Cholesterol
+  LDL Cholesterol
+                                                                               90.3
+                                                                               2.15
+                                                                                                 mg/dL
+                                                                                                 mmol/L
+                                                                                                                                   .
+                                                                                                                         <3.4 mmol/L          16-SH/QTKT-XN**
+  .        LDL Cholesterol                                                      83               mg/dL                   < 131 mg/dL
+
+            H
+  Triglyceride
+  .        Triglyceride
+                                                                               1.74
+                                                                               154
+                                                                                                 mmol/L
+                                                                                                 mg/dL
+                                                                                                                       0.46-1.88 mmol/L
+                                                                                                                        40-166 mg/dL
+                                                                                                                                              17-SH/QTKT-XN**
+
+
+
+BỆĐo hoạt độ AST (Aspartat Aminotransferase)                                    39                U/L           Nam <40 U/L; Nữ <31 U/L 06-SH/QTKT-XN**
+
+
+   N
+  Đo hoạt độ ALT (Alanin Aminotransferase)
+  Đo hoạt độ GGT
+                                                                                36
+                                                                                40
+                                                                                                  U/L
+                                                                                                  U/L
+                                                                                                                Nam <41 U/L; Nữ <31 U/L 07-SH/QTKT-XN**
+                                                                                                                             <40 U/L          08-SH/QTKT-XN**
+
+
+ Ghi chú:            Ký hiệu * nghĩa là kết quả nằm ngoài giá trị tham chiếu (Trị số bình thường áp dụng cho người trưởng thành, khỏe mạnh), dấu         1/3
+ (Notes)             "chấm" ở các kết quả có ý nghĩa là dấu thập phân
+                             ** Đạt chuẩn xét nghiệm ISO 15189 : 2022
+ Phát hành:          HH: Liên Hiếu 06:17; MD: Nguyễn Chí Vinh 06:17; SH: Nguyễn Chí Vinh 06:17
+ (Approved by)
+             BỆNH VIỆN ĐẠI HỌC Y DƯỢC TPHCM
+             (UNIVERSITY MEDICAL CENTER HCMC )
+             215 Hồng Bàng, Phường Chợ Lớn, TP. Hồ Chí Minh
+             (215 Hong Bang Street, Cho Lon Ward, Ho Chi Minh City)
+                                                                      KẾT QUẢ XÉT NGHIỆM
+             ĐT: 028-38554269
+             (Phone: 028-38554269)
+                                                                                Laboratory Report
+                                                                  Mã số :             260926-0448
+               A11-0028860                                        (Sample ID)
+
+ Ông/Bà :           VÕ THANH PHONG                                         Ngày sinh: 01/01/1952 Giới tính : Nam/Male
+ (Patient's full name)
+ Địa chỉ :
+ (Address)
+                    Kp Bàu Sậy, Xã Vĩnh Hưng, Tây Ninh
+                                                                           (DOB)                       (Gender)
+                                                                                                                  Passport no:
+                                                                                                                                     HC
+                                                                                                       Quốc tịch(Nationality): Việt Nam/Vietnamese
+ Số hồ sơ:          A11-0028860
+ (Medical record number)
+ Chẩn đoán :
+ (Diagnosis)
+                                                     Số nhập viện:                                      Số phiếu:
+                                                                                                        (Receipt number)
+                     VIÊM GAN VIRUS B MẠN, HBEAG ÂM (B18.1) / RỐI LOẠN CHUYỂN HÓA MỠ (E78), GAN NHIỄM MỠ (K76.0)                        M
+                                                                                                                             DH260926-0113
+
+
+
+
+ Xác nhận:           05:26:40 ngày 26/09/2026, Lấy mẫu: 05:37:29 ngày 26/09/2026. Nhân viên lấy mẫu: Nguyễn Thu Tâm
+ (Received order time)                                 (Collecting time)
+                                                                                                                      TP
+                                                                                                      (Collecting staff)
+                                                                                                                         .
+                                                       Nhận mẫu: 05:42:14 ngày 26/09/2026 NV nhận mẫu: Nguyễn Thái Phương Thư
+                                                        (Receiving time)                              (Receiving staff)
+
+
+
+                                                                                          DƯ
+                         Xét nghiệm                                      Kết quả              Đơn vị             Khoảng tham chiếu           Số qui trình
+                           (Test)                                       (Results)             (Units)              (Ref. ranges)             (Procedure)
+      XN HUYẾT HỌC
+
+
+                                                                                            ỢC
+      (HAEMATOLOGY)
+  Tổng phân tích tế bào máu bằng máy đếm laser
+  (CBC)
+  WBC                                                                       8.99              10^9 /L                      4 - 10 G/L        HH/QTKT-50
+  - NEU %                                                                   57.6               %N                          45 - 75% N
+  - NEU #
+  - LYM %
+                                                                            5.17
+                                                                            30.2
+                                                                                   Y           G/L
+                                                                                               %L
+                                                                                                                       1.8 - 7.5 G/L
+                                                                                                                           20 - 35% L
+  - LYM #
+  - MONO %
+                                                                      ỌC    2.72
+                                                                             7.5
+                                                                                               G/L
+                                                                                               %M
+                                                                                                                       0.8 - 3.5 G/L
+                                                                                                                           4 - 10% M
+  - MONO #                                                                  0.67               G/L                    0.16 - 1.0 G/L
+  - EOS %
+  - EOS #
+                                                       IH                    1.9
+                                                                            0.17
+                                                                                               %E
+                                                                                               G/L
+                                                                                                                            1 - 8% E
+                                                                                                                      0.01 - 0.8 G/L
+  - BASO %
+  - BASO #
+  - LUC%
+                                          ĐẠ                                 0.3
+                                                                            0.03
+                                                                             2.5
+                                                                                               %B
+                                                                                               G/L
+                                                                                                %
+                                                                                                                            0 - 2% B
+                                                                                                                           0 - 0.2 G/L
+                                                                                                                             0.-4%
+  - LUC#                                                                    0.22              10^9/L                       0 - 0.4 G/L
+  - IG%
+  RBC
+                            ỆN                                              5.05              10^12/L                  3.8 - 5.5 T/L         HH/QTKT-23
+  .
+  .
+           Hb
+           HCT
+                  VI                                                        145
+                                                                           0.439
+                                                                                                g/L
+                                                                                               L/L
+                                                                                                                      120 - 175 g/L
+                                                                                                                     0.35 - 0.53 L/L
+                                                                                                                                             HH/QTKT-52
+
+
+  .        MCV                                                              86.9                fL                         78 - 100 fL
+  .        H
+           MCH                                                              28.7                pG                    26.7 - 30.7 pG
+
+
+BỆ.
+  .
+           MCHC
+           CHCM
+                                                                            331
+                                                                           324 *
+                                                                                                g/L
+                                                                                                g/L
+                                                                                                                      320 - 350 g/L
+                                                                                                                      330 - 370 g/L
+  .
+  .
+  .
+   N       RDW
+           HDW
+           CH
+                                                                            13.2
+                                                                            23.3
+                                                                            28.0
+                                                                                                %
+                                                                                                g/L
+                                                                                                pg
+                                                                                                                           12 - 20 %
+                                                                                                                           22 - 32 g/L
+                                                                                                                           24 - 35 pg
+ Ghi chú:         Ký hiệu * nghĩa là kết quả nằm ngoài giá trị tham chiếu (Trị số bình thường áp dụng cho người trưởng thành, khỏe mạnh), dấu        2/3
+ (Notes)          "chấm" ở các kết quả có ý nghĩa là dấu thập phân
+                          ** Đạt chuẩn xét nghiệm ISO 15189 : 2022
+ Phát hành:       HH: Liên Hiếu 06:17; MD: Nguyễn Chí Vinh 06:17; SH: Nguyễn Chí Vinh 06:17
+ (Approved by)
+             BỆNH VIỆN ĐẠI HỌC Y DƯỢC TPHCM
+             (UNIVERSITY MEDICAL CENTER HCMC )
+             215 Hồng Bàng, Phường Chợ Lớn, TP. Hồ Chí Minh
+             (215 Hong Bang Street, Cho Lon Ward, Ho Chi Minh City)
+                                                                        KẾT QUẢ XÉT NGHIỆM
+             ĐT: 028-38554269
+             (Phone: 028-38554269)
+                                                                                    Laboratory Report
+                                                                    Mã số :             260926-0448
+               A11-0028860                                          (Sample ID)
+
+ Ông/Bà :             VÕ THANH PHONG                                         Ngày sinh: 01/01/1952 Giới tính : Nam/Male
+ (Patient's full name)
+ Địa chỉ :
+ (Address)
+                      Kp Bàu Sậy, Xã Vĩnh Hưng, Tây Ninh
+                                                                             (DOB)                       (Gender)
+                                                                                                                    Passport no:
+                                                                                                                                    HC
+                                                                                                         Quốc tịch(Nationality): Việt Nam/Vietnamese
+ Số hồ sơ:            A11-0028860
+ (Medical record number)
+ Chẩn đoán :
+ (Diagnosis)
+                                                      Số nhập viện:                                       Số phiếu:
+                                                                                                          (Receipt number)
+                      VIÊM GAN VIRUS B MẠN, HBEAG ÂM (B18.1) / RỐI LOẠN CHUYỂN HÓA MỠ (E78), GAN NHIỄM MỠ (K76.0)                      M
+                                                                                                                             DH260926-0113
+
+
+
+
+ Xác nhận:
+ (Received order time)
+                      05:26:40 ngày 26/09/2026, Lấy mẫu: 05:37:29 ngày 26/09/2026. Nhân viên lấy mẫu: Nguyễn Thu Tâm
+                                                         (Collecting time)
+                                                                                                                       TP
+                                                                                                       (Collecting staff)
+                                                                                                                          .
+                                                        Nhận mẫu: 05:42:14 ngày 26/09/2026 NV nhận mẫu: Nguyễn Thái Phương Thư
+                                                         (Receiving time)                              (Receiving staff)
+
+
+
+                                                                                            DƯ
+                          Xét nghiệm                                       Kết quả              Đơn vị            Khoảng tham chiếu          Số qui trình
+                            (Test)                                        (Results)             (Units)             (Ref. ranges)            (Procedure)
+  .        MDW
+  .
+  .
+  PLT
+           NRBC %
+           NRBC#
+                                                                                0
+                                                                                0
+                                                                              216
+                                                                                              ỢC  %
+                                                                                                10^9/L
+                                                                                                10^9/L
+                                                                                                                            0.0-2.0 %
+                                                                                                                        0.0 - 2.0 G/L
+                                                                                                                       150 - 450 G/L         HH/QTKT-51
+  MPV                                                                          7.2                fL                        7 - 12 fL
+  PDW
+
+      XN MIỄN DỊCH
+                                                                              55.3   Y            %                         25 - 65%
+
+
+      (IMMUNOLOGY)
+
+  Alpha FP (AFP)
+                                                                      ỌC       1.7              IU/mL                   < 5.8 IU/mL
+                                                                                                                                             03-MD/QTKT-
+                                                                                                                                                 XN**
+
+
+                                                        IH
+                                            ĐẠ
+                             ỆN
+                    VI
+           H
+BỆ
+ Ghi chú Xét nghiệm:
+
+
+   N
+ (Laboratory notes)
+
+ Ghi chú lâm sàng:
+ (Clinical notes)
+
+ Ghi chú:           Ký hiệu * nghĩa là kết quả nằm ngoài giá trị tham chiếu (Trị số bình thường áp dụng cho người trưởng thành, khỏe mạnh), dấu        3/3
+ (Notes)            "chấm" ở các kết quả có ý nghĩa là dấu thập phân
+                            ** Đạt chuẩn xét nghiệm ISO 15189 : 2022
+ Phát hành:         HH: Liên Hiếu 06:17; MD: Nguyễn Chí Vinh 06:17; SH: Nguyễn Chí Vinh 06:17
+ (Approved by)
+

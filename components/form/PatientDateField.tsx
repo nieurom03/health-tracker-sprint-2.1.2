@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
@@ -19,6 +20,7 @@ function serializeDate(date: Date) {
 }
 
 export default function PatientDateField({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  const styles = useThemedStyles(baseStyles);
   const [showIos, setShowIos] = useState(false);
   const selected = parseDate(value);
   const pickerValue = selected ?? new Date(1990, 0, 1, 12);
@@ -59,7 +61,7 @@ export default function PatientDateField({ value, onChange }: { value: string; o
   </View>;
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   field: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#D0D5DD', borderRadius: 12, paddingHorizontal: 14, paddingVertical: 13, minHeight: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   value: { color: '#172033', fontSize: 16, textTransform: 'capitalize' },
   placeholder: { color: '#98A2B3' },

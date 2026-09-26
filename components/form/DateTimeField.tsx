@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import DateTimePicker, {
@@ -16,6 +17,7 @@ export default function DateTimeField({
   value: Date;
   onChange: (date: Date) => void;
 }) {
+  const styles = useThemedStyles(baseStyles);
   const [iosMode, setIosMode] = useState<PickerMode | null>(null);
 
   const updatePart = (mode: PickerMode, selected: Date) => {
@@ -87,7 +89,7 @@ export default function DateTimeField({
   );
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   box: {
     backgroundColor: '#fff',
     borderWidth: 1,

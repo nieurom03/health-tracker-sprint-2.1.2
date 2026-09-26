@@ -1,0 +1,91 @@
+              BỆNH VIỆN ĐẠI HỌC Y DƯỢC TPHCM
+              (UNIVERSITY MEDICAL CENTER HCMC )
+              215 Hồng Bàng, Phường Chợ Lớn, TP. Hồ Chí Minh
+              (215 Hong Bang Street, Cho Lon Ward, Ho Chi Minh City)
+                                                                       KẾT QUẢ XÉT NGHIỆM
+              ĐT: 028-38554269
+              (Phone: 028-38554269)
+                                                                               Laboratory Report
+                                                                   Mã số :           260620-0426
+               A11-0028860                                         (Sample ID)
+
+ Ông/Bà :             VÕ THANH PHONG                                        Ngày sinh: 01/01/1952 Giới tính : Nam/Male
+ (Patient's full name)
+ Địa chỉ :
+ (Address)
+                      Kp Bàu Sậy, Xã Vĩnh Hưng, Tây Ninh
+                                                                            (DOB)                 (Gender)
+                                                                                                             Passport no:
+                                                                                                                                  HC
+                                                                                                  Quốc tịch(Nationality): Việt Nam/Vietnamese
+ Số hồ sơ:            A11-0028860
+ (Medical record number)
+ Nơi gửi :
+ (Unit)
+                      VIÊM GAN
+                                                      Số nhập viện:                                   Số phiếu:
+                                                                                                      (Receipt number)
+                                                                                                      BS Chỉ định :
+                                                                                                                                     M
+                                                                                                                         DH260620-0140
+
+                                                                                                                         Phan Thế Sang
+                                                                                                      (Referring physician)
+ Bệnh phẩm:
+ (Specimens)
+ Chẩn đoán :
+                      Máu (Blood)
+                                                                                                                   TP
+                                                                                                      Chất lượng mẫu: Đạt (Passed)
+                                                                                                      (Specimens quality)
+                      VIÊM GAN VIRUS B MẠN, HBEAG ÂM (B18.1) / RỐI LOẠN CHUYỂN HÓA MỠ (E78), GAN NHIỄM MỠ (K76.0)     .
+ (Diagnosis)
+ Xác nhận:            05:31:47 ngày 20/06/2026, Lấy mẫu: 05:51:11 ngày 20/06/2026. Nhân viên lấy mẫu: Hồ Thị Thúy
+ (Received order time)                                  (Collecting time)
+
+                                                                                        DƯ       (Collecting staff)
+                                                        Nhận mẫu: 06:03:06 ngày 20/06/2026 NV nhận mẫu: NGUYỄN THỊ NGỌC THU
+                                                         (Receiving time)                        (Receiving staff)
+
+
+
+
+      XN SINH HỌC PHÂN TỬ
+                          Xét nghiệm
+                            (Test)
+                                                                         Kết quả
+                                                                        (Results)         ỢCĐơn vị
+                                                                                            (Units)
+                                                                                                              Khoảng tham chiếu
+                                                                                                                (Ref. ranges)
+                                                                                                                                           Số qui trình
+                                                                                                                                           (Procedure)
+
+      (Laboratory test)
+
+  HBV đo tải lượng Real-time PCR                                            782 *         copies/mL               < 11.9 copies/mL       SHPT/QTKT-02
+  .                                                                     2.89 Log10  Y                                         .
+
+
+                                                                       ỌC
+                                                        IH
+                                           ĐẠ
+                             ỆN
+                    VI
+           H
+BỆ
+ Ghi chú Xét nghiệm:
+
+
+   N
+ (Laboratory notes)
+
+ Ghi chú lâm sàng:
+ (Clinical notes)
+
+ Ghi chú:           Ký hiệu * nghĩa là kết quả nằm ngoài giá trị tham chiếu (Trị số bình thường áp dụng cho người trưởng thành, khỏe mạnh), dấu   1/1
+ (Notes)            "chấm" ở các kết quả có ý nghĩa là dấu thập phân
+                            ** Đạt chuẩn xét nghiệm ISO 15189 : 2022
+ Phát hành:         KHAC: Nguyễn Trung Ngân 14:28
+ (Approved by)
+

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useTheme, useThemedStyles } from "@/hooks/useTheme";
+import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -6,7 +7,13 @@ import {
   Text,
   View,
 } from "react-native";
-import { Stack } from "expo-router";
+import {
+  DarkTheme,
+  DefaultTheme,
+  Stack,
+  ThemeProvider,
+} from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { SQLiteProvider } from "expo-sqlite";
 import {
   initialWindowMetrics,
@@ -24,6 +31,23 @@ import { clearMaterializedDocuments } from "@/utils/protectedFile";
 configureNotificationPresentation();
 
 export default function RootLayout() {
+  const styles = useThemedStyles(baseStyles);
+  const { colors, isDark } = useTheme();
+  const navigationTheme = useMemo(
+    () => ({
+      ...(isDark ? DarkTheme : DefaultTheme),
+      colors: {
+        ...(isDark ? DarkTheme.colors : DefaultTheme.colors),
+        primary: colors.accent,
+        background: colors.background,
+        card: colors.surface,
+        text: colors.text,
+        border: colors.border,
+        notification: colors.accent,
+      },
+    }),
+    [colors, isDark],
+  );
   const [ready, setReady] = useState(false);
   const [error, setError] = useState("");
   const prepare = () => {
@@ -58,17 +82,22 @@ export default function RootLayout() {
       </View>
     );
   return (
-    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <SQLiteProvider
-        databaseName="health-tracker.db"
-        onInit={initializeDatabase}
-      >
-        <AppLockGate>
-          <Stack
-            screenOptions={{
-              headerBackTitle: "Quay lại",
-              headerTitleStyle: { fontWeight: "900" },
-            }}
+    <ThemeProvider value={navigationTheme}>
+      <StatusBar style={isDark ? "light" : "dark"} />
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <SQLiteProvider
+          databaseName="health-tracker.db"
+          onInit={initializeDatabase}
+        >
+          <AppLockGate>
+            <Stack
+              screenOptions={{
+                contentStyle: { backgroundColor: colors.background },
+                headerBackTitle: "Quay lại",
+                headerStyle: { backgroundColor: colors.surface },
+                headerTintColor: colors.accent,
+                headerTitleStyle: { color: colors.text, fontWeight: "900" },
+              }}
           >
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen
@@ -128,14 +157,15 @@ export default function RootLayout() {
               options={{ title: "Báo cáo sức khỏe" }}
             />
             <Stack.Screen name="reminders" options={{ title: "Nhắc lịch" }} />
-          </Stack>
-        </AppLockGate>
-      </SQLiteProvider>
-    </SafeAreaProvider>
+            </Stack>
+          </AppLockGate>
+        </SQLiteProvider>
+      </SafeAreaProvider>
+    </ThemeProvider>
   );
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   loading: {
     flex: 1,
     alignItems: "center",

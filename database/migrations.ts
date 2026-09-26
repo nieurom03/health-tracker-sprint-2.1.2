@@ -150,6 +150,8 @@ export async function migrateDb(db: SQLiteDatabase) {
     ['document_id', 'INTEGER REFERENCES documents(id) ON DELETE SET NULL'],
     ['reference_min', 'REAL'],
     ['reference_max', 'REAL'],
+    ['reference_text', 'TEXT'],
+    ['source_line', 'TEXT'],
   ] as const;
 
   for (const [name, definition] of labAdditions) {

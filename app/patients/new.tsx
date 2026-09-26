@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useState } from "react";
 import {
   Alert,
@@ -19,6 +20,7 @@ import {
 } from "@/database/repositories/patientRepository";
 
 export default function NewPatientScreen() {
+  const styles = useThemedStyles(baseStyles);
   const db = useSQLiteContext();
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
@@ -81,7 +83,7 @@ export default function NewPatientScreen() {
     </KeyboardAvoidingView>
   );
 }
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   container: {
     padding: 18,
     gap: 8,

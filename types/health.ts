@@ -23,8 +23,11 @@ export type MetricPoint = {
   source: MetricSource;
   notes?: string | null;
   document_id?: number | null;
+  document_name?: string | null;
+  source_line?: string | null;
   reference_min?: number | null;
   reference_max?: number | null;
+  reference_text?: string | null;
 };
 
 export type HealthDocument = {

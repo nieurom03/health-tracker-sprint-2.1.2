@@ -1,9 +1,11 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { ActionSheetIOS, Alert, Platform, Pressable, StyleSheet, Text } from 'react-native';
 import AppIcon from '@/components/AppIcon';
 
 const choices = ['Nam', 'Nữ', 'Khác'];
 
 export default function GenderField({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  const styles = useThemedStyles(baseStyles);
   function open() {
     if (Platform.OS === 'ios') {
       const options = ['Hủy', ...choices, ...(value ? ['Xóa lựa chọn'] : [])];
@@ -29,7 +31,7 @@ export default function GenderField({ value, onChange }: { value: string; onChan
   </Pressable>;
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   field: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#D0D5DD', borderRadius: 12, paddingHorizontal: 14, paddingVertical: 13, minHeight: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   value: { color: '#172033', fontSize: 16 },
   placeholder: { color: '#98A2B3' },

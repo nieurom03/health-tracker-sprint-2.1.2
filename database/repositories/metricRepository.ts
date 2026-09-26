@@ -14,20 +14,50 @@ export const LAB_TYPES = [
   { key: 'glucose', name: 'Glucose', unit: 'mmol/L', placeholder: '6.8', icon: 'G' },
   { key: 'hba1c', name: 'HbA1c', unit: '%', placeholder: '6.2', icon: 'A1' },
   { key: 'creatinine', name: 'Creatinine', unit: 'µmol/L', placeholder: '102', icon: 'Cr' },
+  { key: 'egfr', name: 'eGFR', unit: 'mL/phút/1.73 m²', placeholder: '90', icon: 'eG' },
+  { key: 'uric_acid', name: 'Uric acid', unit: 'µmol/L', placeholder: '350', icon: 'UA' },
   { key: 'ast', name: 'AST', unit: 'U/L', placeholder: '32', icon: 'AS' },
   { key: 'alt', name: 'ALT', unit: 'U/L', placeholder: '46', icon: 'AL' },
+  { key: 'ggt', name: 'GGT', unit: 'U/L', placeholder: '40', icon: 'GG' },
   { key: 'cholesterol', name: 'Cholesterol', unit: 'mmol/L', placeholder: '5.6', icon: 'C' },
+  { key: 'non_hdl', name: 'Non-HDL Cholesterol', unit: 'mmol/L', placeholder: '2.4', icon: 'N' },
   { key: 'ldl', name: 'LDL-C', unit: 'mmol/L', placeholder: '3.2', icon: 'LD' },
   { key: 'hdl', name: 'HDL-C', unit: 'mmol/L', placeholder: '1.3', icon: 'HD' },
   { key: 'triglyceride', name: 'Triglyceride', unit: 'mmol/L', placeholder: '1.7', icon: 'TG' },
   { key: 'wbc', name: 'WBC', unit: '10^9/L', placeholder: '7.5', icon: 'W' },
+  { key: 'neu_percent', name: 'NEU %', unit: '%', placeholder: '57', icon: 'N%' },
+  { key: 'neu_abs', name: 'NEU #', unit: '10^9/L', placeholder: '5.1', icon: 'N#' },
+  { key: 'lym_percent', name: 'LYM %', unit: '%', placeholder: '30', icon: 'L%' },
+  { key: 'lym_abs', name: 'LYM #', unit: '10^9/L', placeholder: '2.7', icon: 'L#' },
+  { key: 'mono_percent', name: 'MONO %', unit: '%', placeholder: '7.5', icon: 'M%' },
+  { key: 'mono_abs', name: 'MONO #', unit: '10^9/L', placeholder: '0.7', icon: 'M#' },
+  { key: 'eos_percent', name: 'EOS %', unit: '%', placeholder: '1.9', icon: 'E%' },
+  { key: 'eos_abs', name: 'EOS #', unit: '10^9/L', placeholder: '0.2', icon: 'E#' },
+  { key: 'baso_percent', name: 'BASO %', unit: '%', placeholder: '0.3', icon: 'B%' },
+  { key: 'baso_abs', name: 'BASO #', unit: '10^9/L', placeholder: '0.03', icon: 'B#' },
+  { key: 'luc_percent', name: 'LUC %', unit: '%', placeholder: '2.5', icon: 'U%' },
+  { key: 'luc_abs', name: 'LUC #', unit: '10^9/L', placeholder: '0.22', icon: 'U#' },
+  { key: 'ig_percent', name: 'IG %', unit: '%', placeholder: '0.5', icon: 'I%' },
+  { key: 'ig_abs', name: 'IG #', unit: '10^9/L', placeholder: '0.05', icon: 'I#' },
   { key: 'rbc', name: 'RBC', unit: '10^12/L', placeholder: '4.8', icon: 'R' },
-  { key: 'hgb', name: 'Hemoglobin', unit: 'g/L', placeholder: '145', icon: 'Hb' },
+  { key: 'hgb', name: 'Hemoglobin (Hb)', unit: 'g/L', placeholder: '145', icon: 'Hb' },
   { key: 'hct', name: 'Hematocrit', unit: '%', placeholder: '43', icon: 'Ht' },
   { key: 'plt', name: 'Platelet', unit: '10^9/L', placeholder: '250', icon: 'P' },
   { key: 'mcv', name: 'MCV', unit: 'fL', placeholder: '90', icon: 'MC' },
   { key: 'mch', name: 'MCH', unit: 'pg', placeholder: '30', icon: 'MH' },
   { key: 'mchc', name: 'MCHC', unit: 'g/L', placeholder: '335', icon: 'M3' }
+  ,{ key: 'chcm', name: 'CHCM', unit: 'g/L', placeholder: '324', icon: 'CH' }
+  ,{ key: 'rdw', name: 'RDW', unit: '%', placeholder: '13.2', icon: 'RD' }
+  ,{ key: 'hdw', name: 'HDW', unit: 'g/L', placeholder: '23.3', icon: 'HD' }
+  ,{ key: 'ch', name: 'CH', unit: 'pg', placeholder: '28', icon: 'CH' }
+  ,{ key: 'mdw', name: 'MDW', unit: '%', placeholder: '55', icon: 'MD' }
+  ,{ key: 'nrbc_percent', name: 'NRBC %', unit: '%', placeholder: '0', icon: 'NR%' }
+  ,{ key: 'nrbc_abs', name: 'NRBC #', unit: '10^9/L', placeholder: '0', icon: 'NR#' }
+  ,{ key: 'mpv', name: 'MPV', unit: 'fL', placeholder: '7.2', icon: 'MP' }
+  ,{ key: 'pdw', name: 'PDW', unit: '%', placeholder: '55', icon: 'PD' }
+  ,{ key: 'afp', name: 'Alpha FP (AFP)', unit: 'IU/mL', placeholder: '1.7', icon: 'AFP' }
+  ,{ key: 'hbv_viral_load', name: 'HBV tải lượng', unit: 'copies/mL', placeholder: '782', icon: 'HBV' }
+  ,{ key: 'hbv_log10', name: 'HBV Log10', unit: 'Log10', placeholder: '2.89', icon: 'LOG' }
 ] as const;
 
 export function metricDefinition(source: MetricSource, key: string) {
@@ -42,11 +72,12 @@ export async function addVital(db: SQLiteDatabase, input: { patientId: number; t
   );
 }
 
-export async function addLab(db: SQLiteDatabase, input: { patientId: number; testCode: string; testName: string; value: number; unit: string; testedAt: string; notes?: string; documentId?: number; referenceMin?: number; referenceMax?: number }) {
+export async function addLab(db: SQLiteDatabase, input: { patientId: number; testCode: string; testName: string; value: number; unit: string; testedAt: string; notes?: string; documentId?: number; referenceMin?: number; referenceMax?: number; referenceText?: string; sourceLine?: string }) {
   return db.runAsync(
-    `INSERT INTO lab_results(patient_id, document_id, test_code, test_name, value, unit, reference_min, reference_max, tested_at, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO lab_results(patient_id, document_id, test_code, test_name, value, unit, reference_min, reference_max, reference_text, tested_at, notes, source_line) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     input.patientId, input.documentId ?? null, input.testCode, input.testName, input.value, input.unit,
-    input.referenceMin ?? null, input.referenceMax ?? null, input.testedAt, input.notes || null
+    input.referenceMin ?? null, input.referenceMax ?? null, input.referenceText || null, input.testedAt, input.notes || null,
+    input.sourceLine || null,
   );
 }
 
@@ -57,7 +88,9 @@ export type DocumentLabInput = {
   unit: string;
   referenceMin?: number;
   referenceMax?: number;
+  referenceText?: string;
   notes?: string;
+  sourceLine?: string;
 };
 
 export async function countDocumentLabResults(db: SQLiteDatabase, documentId: number) {
@@ -89,8 +122,10 @@ export async function replaceDocumentLabResults(
         unit: result.unit,
         referenceMin: result.referenceMin,
         referenceMax: result.referenceMax,
+        referenceText: result.referenceText,
         testedAt: input.testedAt,
         notes: result.notes,
+        sourceLine: result.sourceLine,
       });
     }
   });
@@ -103,13 +138,13 @@ export async function getTimeline(db: SQLiteDatabase, patientId: number, limit =
     `SELECT id, patient_id, type AS metric_key,
        CASE type WHEN 'blood_pressure' THEN 'Huyết áp' WHEN 'heart_rate' THEN 'Nhịp tim' WHEN 'weight' THEN 'Cân nặng' WHEN 'height' THEN 'Chiều cao' WHEN 'temperature' THEN 'Nhiệt độ' WHEN 'spo2' THEN 'SpO₂' ELSE type END AS metric_name,
        value1 AS value, value2, unit, measured_at, 'vital' AS source, notes,
-       NULL AS document_id, NULL AS reference_min, NULL AS reference_max
+       NULL AS document_id, NULL AS document_name, NULL AS source_line, NULL AS reference_min, NULL AS reference_max, NULL AS reference_text
      FROM vital_signs WHERE patient_id = ? ${vitalClause}
      UNION ALL
-     SELECT id, patient_id, COALESCE(test_code, lower(test_name)) AS metric_key, test_name AS metric_name,
-       value, NULL AS value2, unit, tested_at AS measured_at, 'lab' AS source, notes,
-       document_id, reference_min, reference_max
-     FROM lab_results WHERE patient_id = ? ${labClause}
+     SELECT l.id, l.patient_id, COALESCE(l.test_code, lower(l.test_name)) AS metric_key, l.test_name AS metric_name,
+       l.value, NULL AS value2, l.unit, l.tested_at AS measured_at, 'lab' AS source, l.notes,
+       l.document_id, d.file_name AS document_name, l.source_line, l.reference_min, l.reference_max, l.reference_text
+     FROM lab_results l LEFT JOIN documents d ON d.id = l.document_id WHERE l.patient_id = ? ${labClause}
      ORDER BY measured_at DESC LIMIT ?`, patientId, patientId, limit
   );
 }
@@ -126,15 +161,15 @@ export async function getMetricHistory(db: SQLiteDatabase, patientId: number, me
     `SELECT id, patient_id, type AS metric_key,
        CASE type WHEN 'blood_pressure' THEN 'Huyết áp' WHEN 'heart_rate' THEN 'Nhịp tim' WHEN 'weight' THEN 'Cân nặng' WHEN 'height' THEN 'Chiều cao' WHEN 'temperature' THEN 'Nhiệt độ' WHEN 'spo2' THEN 'SpO₂' ELSE type END AS metric_name,
        value1 AS value, value2, unit, measured_at, 'vital' AS source, notes,
-       NULL AS document_id, NULL AS reference_min, NULL AS reference_max
+       NULL AS document_id, NULL AS document_name, NULL AS source_line, NULL AS reference_min, NULL AS reference_max, NULL AS reference_text
      FROM vital_signs WHERE patient_id = ? AND type = ? ORDER BY measured_at ASC`, patientId, metricKey
   );
   if (vital.length) return vital;
   return db.getAllAsync<MetricPoint>(
-    `SELECT id, patient_id, COALESCE(test_code, lower(test_name)) AS metric_key, test_name AS metric_name,
-       value, NULL AS value2, unit, tested_at AS measured_at, 'lab' AS source, notes,
-       document_id, reference_min, reference_max
-     FROM lab_results WHERE patient_id = ? AND COALESCE(test_code, lower(test_name)) = ? ORDER BY tested_at ASC`, patientId, metricKey
+    `SELECT l.id, l.patient_id, COALESCE(l.test_code, lower(l.test_name)) AS metric_key, l.test_name AS metric_name,
+       l.value, NULL AS value2, l.unit, l.tested_at AS measured_at, 'lab' AS source, l.notes,
+       l.document_id, d.file_name AS document_name, l.source_line, l.reference_min, l.reference_max, l.reference_text
+     FROM lab_results l LEFT JOIN documents d ON d.id = l.document_id WHERE l.patient_id = ? AND COALESCE(l.test_code, lower(l.test_name)) = ? ORDER BY l.tested_at ASC`, patientId, metricKey
   );
 }
 
@@ -144,13 +179,13 @@ export async function getMetricRecord(db: SQLiteDatabase, source: MetricSource, 
       `SELECT id, patient_id, type AS metric_key,
        CASE type WHEN 'blood_pressure' THEN 'Huyết áp' WHEN 'heart_rate' THEN 'Nhịp tim' WHEN 'weight' THEN 'Cân nặng' WHEN 'height' THEN 'Chiều cao' WHEN 'temperature' THEN 'Nhiệt độ' WHEN 'spo2' THEN 'SpO₂' ELSE type END AS metric_name,
        value1 AS value, value2, unit, measured_at, 'vital' AS source, notes,
-       NULL AS document_id, NULL AS reference_min, NULL AS reference_max FROM vital_signs WHERE id = ?`, id
+       NULL AS document_id, NULL AS document_name, NULL AS source_line, NULL AS reference_min, NULL AS reference_max, NULL AS reference_text FROM vital_signs WHERE id = ?`, id
     );
   }
   return db.getFirstAsync<MetricPoint>(
-    `SELECT id, patient_id, COALESCE(test_code, lower(test_name)) AS metric_key, test_name AS metric_name,
-     value, NULL AS value2, unit, tested_at AS measured_at, 'lab' AS source, notes,
-     document_id, reference_min, reference_max FROM lab_results WHERE id = ?`, id
+    `SELECT l.id, l.patient_id, COALESCE(l.test_code, lower(l.test_name)) AS metric_key, l.test_name AS metric_name,
+     l.value, NULL AS value2, l.unit, l.tested_at AS measured_at, 'lab' AS source, l.notes,
+     l.document_id, d.file_name AS document_name, l.source_line, l.reference_min, l.reference_max, l.reference_text FROM lab_results l LEFT JOIN documents d ON d.id = l.document_id WHERE l.id = ?`, id
   );
 }
 

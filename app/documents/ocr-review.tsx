@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -18,6 +19,7 @@ import {
   useLocalSearchParams,
   useNavigation,
 } from "expo-router";
+import Constants from "expo-constants";
 import { useSQLiteContext } from "expo-sqlite";
 
 import {
@@ -30,6 +32,7 @@ import { materializeDocument } from "@/utils/protectedFile";
 type ReviewState = "loading" | "scanning" | "ready" | "error";
 
 export default function OcrReviewScreen() {
+  const styles = useThemedStyles(baseStyles);
   const { id, scan } = useLocalSearchParams<{ id: string; scan?: string }>();
   const documentId = Number(id);
   const shouldScan = scan === "1";
@@ -51,6 +54,11 @@ export default function OcrReviewScreen() {
     setState("scanning");
     setErrorMessage("");
     try {
+      if (Constants.appOwnership === "expo") {
+        throw new Error(
+          "OCR không chạy trong Expo Go. Hãy mở ứng dụng Health Tracker development build đã cài trên thiết bị.",
+        );
+      }
       const { isAvailable, recognizeText } =
         await import("@dariyd/react-native-text-recognition");
       if (!(await isAvailable())) {
@@ -61,24 +69,47 @@ export default function OcrReviewScreen() {
         document.file_name,
       );
       setPreviewUri(uri);
-      const result = await recognizeText(uri, {
-        languages: ["vi", "en"],
-        recognitionLevel: document.type === "pdf" ? "line" : "word",
+      const primaryOptions = {
+        languages: [],
+        recognitionLevel: document.type === "pdf" ? ("line" as const) : ("word" as const),
         useFastRecognition: false,
-        pdfDpi: 300,
-      });
-      if (!result.success) {
-        throw new Error(
-          result.errorMessage || "Không nhận dạng được tài liệu.",
-        );
+        pdfDpi: 400,
+        preprocessImages: false,
+      };
+      const attempt = async (options: Parameters<typeof recognizeText>[1]) => {
+        try {
+          return await recognizeText(uri, options);
+        } catch {
+          return null;
+        }
+      };
+      let result = await attempt(primaryOptions);
+      const primaryText = result?.success ? (result.fullText?.trim() ?? "") : "";
+      if (!result?.success || primaryText.length < 40) {
+        const fallback = await attempt({
+          ...primaryOptions,
+          pdfDpi: document.type === "pdf" ? 550 : 400,
+          recognitionLevel: "line",
+          preprocessImages: true,
+        });
+        if (fallback?.success && (fallback.fullText?.trim().length ?? 0) > primaryText.length) {
+          result = fallback;
+        }
+      }
+      if (!result?.success) {
+        throw new Error("Không nhận dạng được tài liệu sau hai lần thử.");
       }
       setDraft(result.fullText?.trim() ?? "");
       setState("ready");
     } catch (error) {
-      setErrorMessage(
+      const message =
         error instanceof Error
           ? error.message
-          : "File không còn tồn tại hoặc không đọc được.",
+          : "File không còn tồn tại hoặc không đọc được.";
+      setErrorMessage(
+        message.includes("doesn't seem to be linked")
+          ? "Bản ứng dụng hiện tại chưa chứa mô-đun OCR. Hãy cài lại Health Tracker development build, không mở dự án bằng Expo Go."
+          : message,
       );
       setState("error");
     }
@@ -259,30 +290,38 @@ export default function OcrReviewScreen() {
 
         {state === "ready" && (
           <>
-            <View style={styles.sectionHeader}>
-              <View>
-                <Text style={styles.label}>VĂN BẢN NHẬN DẠNG</Text>
-                <Text style={styles.counter}>
-                  {draft.length.toLocaleString("vi-VN")} ký tự
-                </Text>
-              </View>
-              {draft !== originalText && (
-                <View style={styles.changedBadge}>
-                  <Text style={styles.changedText}>CHƯA LƯU</Text>
+            <View style={styles.editorCard}>
+              <View style={styles.sectionHeader}>
+                <View>
+                  <Text style={styles.label}>VĂN BẢN NHẬN DẠNG</Text>
+                  <Text style={styles.counter}>
+                    {draft.length.toLocaleString("vi-VN")} ký tự · Có thể chỉnh sửa
+                  </Text>
                 </View>
-              )}
+                {draft !== originalText && (
+                  <View style={styles.changedBadge}>
+                    <Text style={styles.changedText}>CHƯA LƯU</Text>
+                  </View>
+                )}
+              </View>
+              <View style={styles.editorFrame}>
+                <TextInput
+                  style={styles.editor}
+                  value={draft}
+                  onChangeText={setDraft}
+                  multiline
+                  textAlignVertical="top"
+                  autoCapitalize="sentences"
+                  autoCorrect={false}
+                  placeholder="Không tìm thấy văn bản. Bạn có thể nhập nội dung thủ công tại đây."
+                  placeholderTextColor="#94A3B8"
+                  accessibilityLabel="Nội dung OCR cần review"
+                />
+              </View>
+              <Text style={styles.editorHint}>
+                Đối chiếu với tài liệu gốc trước khi lưu để hạn chế sai sót nhận dạng.
+              </Text>
             </View>
-            <TextInput
-              style={styles.editor}
-              value={draft}
-              onChangeText={setDraft}
-              multiline
-              textAlignVertical="top"
-              autoCapitalize="sentences"
-              autoCorrect={false}
-              placeholder="Không tìm thấy văn bản. Bạn có thể nhập nội dung thủ công tại đây."
-              accessibilityLabel="Nội dung OCR cần review"
-            />
             <View style={styles.actionsRow}>
               <Pressable
                 style={styles.secondaryButton}
@@ -329,7 +368,7 @@ export default function OcrReviewScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: "#F8FAFC" },
   container: { padding: 18, paddingBottom: 48, gap: 14 },
   hero: { backgroundColor: "#0F172A", borderRadius: 22, padding: 20 },
@@ -350,6 +389,11 @@ const styles = StyleSheet.create({
     borderColor: "#E2E8F0",
     borderRadius: 17,
     padding: 11,
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
   },
   thumbnail: {
     width: 60,
@@ -379,6 +423,11 @@ const styles = StyleSheet.create({
     gap: 10,
     borderWidth: 1,
     borderColor: "#E2E8F0",
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 2,
   },
   statusTitle: {
     color: "#0F172A",
@@ -407,6 +456,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  editorCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 21,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    padding: 14,
+    gap: 10,
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 2,
+  },
   label: {
     color: "#475569",
     fontSize: 11,
@@ -422,15 +484,23 @@ const styles = StyleSheet.create({
   },
   changedText: { color: "#B45309", fontSize: 9, fontWeight: "900" },
   editor: {
-    minHeight: 360,
-    backgroundColor: "#fff",
+    minHeight: 390,
+    backgroundColor: "#F8FAFC",
     color: "#0F172A",
+    padding: 14,
+    fontSize: 14.5,
+    lineHeight: 22,
+  },
+  editorFrame: {
     borderWidth: 1,
     borderColor: "#CBD5E1",
-    borderRadius: 17,
-    padding: 15,
-    fontSize: 14,
-    lineHeight: 21,
+    borderRadius: 15,
+    overflow: "hidden",
+  },
+  editorHint: {
+    color: "#94A3B8",
+    fontSize: 10,
+    lineHeight: 15,
   },
   actionsRow: { flexDirection: "row", gap: 10 },
   secondaryButton: {
@@ -442,6 +512,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 1,
   },
   secondaryText: { color: "#1D4ED8", fontSize: 12, fontWeight: "900" },
   mutedText: { color: "#94A3B8" },
@@ -451,6 +526,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: "#2563EB",
+    shadowOpacity: 0.24,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 3,
   },
   saveText: { color: "#fff", fontSize: 14, fontWeight: "900" },
   saveHint: { color: "#64748B", fontSize: 10, textAlign: "center" },

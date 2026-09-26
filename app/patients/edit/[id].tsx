@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -7,6 +8,7 @@ import PatientDateField from '@/components/form/PatientDateField';
 import { getPatient, updatePatient } from '@/database/repositories/patientRepository';
 
 export default function EditPatientScreen() {
+  const styles = useThemedStyles(baseStyles);
   const { id } = useLocalSearchParams<{ id: string }>();
   const patientId = Number(id);
   const db = useSQLiteContext();
@@ -66,7 +68,7 @@ export default function EditPatientScreen() {
   </KeyboardAvoidingView>;
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: '#F6F8FB' },
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F6F8FB' },
   container: { padding: 18, paddingBottom: 42, gap: 8 },

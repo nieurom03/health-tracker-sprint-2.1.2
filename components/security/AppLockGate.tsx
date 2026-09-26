@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import {
   useCallback,
   useEffect,
@@ -13,6 +14,7 @@ import { clearMaterializedDocuments } from "@/utils/protectedFile";
 import AppIcon from "@/components/AppIcon";
 
 export default function AppLockGate({ children }: { children: ReactNode }) {
+  const s = useThemedStyles(baseStyles);
   const db = useSQLiteContext();
   const [enabled, setEnabled] = useState(false);
   const [locked, setLocked] = useState(false);
@@ -46,8 +48,14 @@ export default function AppLockGate({ children }: { children: ReactNode }) {
         clearMaterializedDocuments();
       }
       if (state === "active" && enabled) {
-        const timeout =
-          Number((await getSetting(db, "auto_lock_seconds")) || "60") * 1000;
+        const timeoutSeconds = Number(
+          (await getSetting(db, "auto_lock_seconds")) || "60",
+        );
+        if (timeoutSeconds <= 0) {
+          backgroundAt.current = 0;
+          return;
+        }
+        const timeout = timeoutSeconds * 1000;
         if (
           backgroundAt.current &&
           Date.now() - backgroundAt.current >= timeout
@@ -82,7 +90,7 @@ export default function AppLockGate({ children }: { children: ReactNode }) {
     );
   return children;
 }
-const s = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   center: {
     flex: 1,
     backgroundColor: "#F8FAFC",

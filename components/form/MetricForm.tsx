@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useTheme";
 import { useMemo, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
@@ -10,6 +11,7 @@ type Props = { patientId: number; initial?: MetricPoint | null };
 type MetricChoice = { key: string; name: string; unit: string; placeholder: string; placeholder2?: string; hasSecond?: boolean; icon?: string };
 
 export default function MetricForm({ patientId, initial }: Props) {
+  const styles = useThemedStyles(baseStyles);
   const db = useSQLiteContext();
   const editing = !!initial;
   const [mode, setMode] = useState<MetricSource>(initial?.source ?? 'vital');
@@ -66,6 +68,12 @@ export default function MetricForm({ patientId, initial }: Props) {
       <Text style={styles.label}>Giá trị</Text>
       <View style={styles.valueCard}><View style={styles.valueRow}><TextInput style={styles.valueInput} keyboardType="decimal-pad" value={v1} onChangeText={setV1} placeholder={selected.placeholder}/>{mode === 'vital' && 'hasSecond' in selected && selected.hasSecond && <><Text style={styles.slash}>/</Text><TextInput style={styles.valueInput} keyboardType="decimal-pad" value={v2} onChangeText={setV2} placeholder={selected.placeholder2}/></>}<Text style={styles.unit}>{selected.unit}</Text></View></View>
       <Text style={styles.label}>Thời điểm</Text><DateTimeField value={date} onChange={setDate}/>
+      {editing && initial?.source === 'lab' && (initial.document_name || initial.source_line) && <View style={styles.sourceCard}>
+        <Text style={styles.sourceTitle}>NGUỒN CHỈ SỐ</Text>
+        {initial.document_name && <Text style={styles.sourceText}>Tài liệu: {initial.document_name}</Text>}
+        {initial.reference_text && <Text style={styles.sourceText}>Tham chiếu: {initial.reference_text}</Text>}
+        {initial.source_line && <Text style={styles.sourceLine}>Dòng OCR: {initial.source_line}</Text>}
+      </View>}
       <Text style={styles.label}>Ghi chú</Text><TextInput style={styles.notes} multiline value={notes} onChangeText={setNotes} placeholder="Ví dụ: đo sau ăn 2 giờ, vừa vận động..."/>
       <Pressable style={styles.primary} onPress={save}><Text style={styles.primaryText}>{editing ? 'Lưu thay đổi' : 'Lưu chỉ số'}</Text></Pressable>
       {editing && <Pressable style={styles.delete} onPress={remove}><Text style={styles.deleteText}>Xóa chỉ số này</Text></Pressable>}
@@ -73,10 +81,10 @@ export default function MetricForm({ patientId, initial }: Props) {
   </KeyboardAvoidingView>;
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   container:{padding:18,paddingBottom:44,gap:10,backgroundColor:'#F8FAFC',minHeight:'100%'}, hero:{backgroundColor:'#0F172A',borderRadius:24,padding:20,marginBottom:4},heroEyebrow:{fontSize:11,fontWeight:'900',letterSpacing:1,color:'#93C5FD'},heroTitle:{fontSize:25,fontWeight:'900',color:'#fff',marginTop:5},heroText:{fontSize:12,color:'#CBD5E1',marginTop:5},
   segment:{flexDirection:'row',backgroundColor:'#E2E8F0',borderRadius:15,padding:4},seg:{flex:1,padding:11,alignItems:'center',borderRadius:12},segActive:{backgroundColor:'#fff'},segText:{fontWeight:'800',color:'#64748B'},segTextActive:{color:'#0F172A'},
   label:{fontSize:12,fontWeight:'900',color:'#475569',marginTop:10,textTransform:'uppercase',letterSpacing:.5},chips:{flexDirection:'row',flexWrap:'wrap',gap:8},chip:{paddingHorizontal:13,paddingVertical:10,borderRadius:99,backgroundColor:'#fff',borderWidth:1,borderColor:'#E2E8F0'},chipActive:{backgroundColor:'#2563EB',borderColor:'#2563EB'},chipDisabled:{opacity:.35},chipText:{fontSize:12,fontWeight:'800',color:'#475569'},chipTextActive:{color:'#fff'},
-  valueCard:{backgroundColor:'#fff',borderWidth:1,borderColor:'#E2E8F0',borderRadius:18,padding:14},valueRow:{flexDirection:'row',alignItems:'center',gap:8},valueInput:{flex:1,minWidth:70,fontSize:30,fontWeight:'900',color:'#0F172A',paddingVertical:4},slash:{fontWeight:'900',fontSize:26,color:'#94A3B8'},unit:{fontWeight:'900',color:'#64748B'},notes:{backgroundColor:'#fff',borderWidth:1,borderColor:'#E2E8F0',borderRadius:16,padding:14,fontSize:15,height:96,textAlignVertical:'top'},
+  valueCard:{backgroundColor:'#fff',borderWidth:1,borderColor:'#E2E8F0',borderRadius:18,padding:14},valueRow:{flexDirection:'row',alignItems:'center',gap:8},valueInput:{flex:1,minWidth:70,fontSize:30,fontWeight:'900',color:'#0F172A',paddingVertical:4},slash:{fontWeight:'900',fontSize:26,color:'#94A3B8'},unit:{fontWeight:'900',color:'#64748B'},sourceCard:{backgroundColor:'#EFF6FF',borderWidth:1,borderColor:'#BFDBFE',borderRadius:14,padding:12,gap:4},sourceTitle:{fontSize:10,fontWeight:'900',color:'#1D4ED8',letterSpacing:.6},sourceText:{fontSize:12,fontWeight:'800',color:'#1E3A8A'},sourceLine:{fontSize:11,color:'#334155',lineHeight:16},notes:{backgroundColor:'#fff',borderWidth:1,borderColor:'#E2E8F0',borderRadius:16,padding:14,fontSize:15,height:96,textAlignVertical:'top'},
   primary:{marginTop:14,backgroundColor:'#2563EB',padding:16,borderRadius:16,alignItems:'center'},primaryText:{color:'#fff',fontWeight:'900',fontSize:15},delete:{padding:15,alignItems:'center'},deleteText:{color:'#DC2626',fontWeight:'900'}
 });
