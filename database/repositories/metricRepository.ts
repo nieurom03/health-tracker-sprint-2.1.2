@@ -25,8 +25,8 @@ export const LAB_TYPES = [
   { key: 'hdl', name: 'HDL-C', unit: 'mmol/L', placeholder: '1.3', icon: 'HD' },
   { key: 'triglyceride', name: 'Triglyceride', unit: 'mmol/L', placeholder: '1.7', icon: 'TG' },
   { key: 'wbc', name: 'WBC', unit: '10^9/L', placeholder: '7.5', icon: 'W' },
-  { key: 'neu_percent', name: 'NEU %', unit: '%', placeholder: '57', icon: 'N%' },
-  { key: 'neu_abs', name: 'NEU #', unit: '10^9/L', placeholder: '5.1', icon: 'N#' },
+  { key: 'neu_percent', name: 'NEUT %', unit: '%', placeholder: '57', icon: 'N%' },
+  { key: 'neu_abs', name: 'NEUT #', unit: '10^9/L', placeholder: '5.1', icon: 'N#' },
   { key: 'lym_percent', name: 'LYM %', unit: '%', placeholder: '30', icon: 'L%' },
   { key: 'lym_abs', name: 'LYM #', unit: '10^9/L', placeholder: '2.7', icon: 'L#' },
   { key: 'mono_percent', name: 'MONO %', unit: '%', placeholder: '7.5', icon: 'M%' },
@@ -55,6 +55,7 @@ export const LAB_TYPES = [
   ,{ key: 'nrbc_abs', name: 'NRBC #', unit: '10^9/L', placeholder: '0', icon: 'NR#' }
   ,{ key: 'mpv', name: 'MPV', unit: 'fL', placeholder: '7.2', icon: 'MP' }
   ,{ key: 'pdw', name: 'PDW', unit: '%', placeholder: '55', icon: 'PD' }
+  ,{ key: 'pct', name: 'PCT', unit: '%', placeholder: '0.2', icon: 'PC' }
   ,{ key: 'afp', name: 'Alpha FP (AFP)', unit: 'IU/mL', placeholder: '1.7', icon: 'AFP' }
   ,{ key: 'hbv_viral_load', name: 'HBV tải lượng', unit: 'copies/mL', placeholder: '782', icon: 'HBV' }
   ,{ key: 'hbv_log10', name: 'HBV Log10', unit: 'Log10', placeholder: '2.89', icon: 'LOG' }

@@ -31,6 +31,7 @@ type Definition = {
 };
 
 const numberPattern = /[-+]?\d+(?:[.,]\d+)?/g;
+const containsNumberPattern = /[-+]?\d+(?:[.,]\d+)?/;
 const rangePattern =
   /([-+]?\d+(?:[.,]\d+)?)\s*(?:-|–|—|đến|to)\s*([-+]?\d+(?:[.,]\d+)?)/i;
 
@@ -53,6 +54,8 @@ function normalizedUnit(value: string) {
     .replace(/g\s*[/\\]\s*l/gi, "g/L")
     .replace(/[x×]\s*10\s*\^?\s*9\s*[/\\]\s*l/gi, "10^9/L")
     .replace(/[x×]\s*10\s*\^?\s*12\s*[/\\]\s*l/gi, "10^12/L")
+    .replace(/10\s*⁹\s*[/\\]\s*l/gi, "10^9/L")
+    .replace(/10\s*¹²\s*[/\\]\s*l/gi, "10^12/L")
     .replace(/10\s*\^\s*9\s*[/\\]\s*l/gi, "10^9/L")
     .replace(/10\s*\^\s*12\s*[/\\]\s*l/gi, "10^12/L")
     .replace(/u\s*[/\\]\s*l/gi, "U/L")
@@ -179,14 +182,14 @@ const definitions: Definition[] = [
     name: "WBC",
     unit: "10^9/L",
     aliases: [/\bwbc\b/i, /white\s*blood\s*cell/i, /bạch\s*cầu/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*9\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*9|10\s*⁹)\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
   },
   {
     key: "rbc",
     name: "RBC",
     unit: "10^12/L",
     aliases: [/\brbc\b/i, /red\s*blood\s*cell/i, /hồng\s*cầu/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*12\s*[/\\]\s*l/i, /t\s*[/\\]\s*l/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*12|10\s*¹²)\s*[/\\]\s*l/i, /t\s*[/\\]\s*l/i],
   },
   {
     key: "hgb",
@@ -210,7 +213,7 @@ const definitions: Definition[] = [
     name: "Platelet",
     unit: "10^9/L",
     aliases: [/\bplt\b/i, /platelets?/i, /tiểu\s*cầu/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*9\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*9|10\s*⁹)\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
   },
   {
     key: "mcv",
@@ -236,17 +239,17 @@ const definitions: Definition[] = [
   },
   {
     key: "neu_percent",
-    name: "NEU %",
+    name: "NEUT %",
     unit: "%",
-    aliases: [/\bneu\s*%/i, /neutrophil(?:s)?\s*%/i],
+    aliases: [/\bneut?\s*%/i, /neutrophil(?:s)?\s*%/i],
     unitAliases: [/%[a-z]?/i],
   },
   {
     key: "neu_abs",
-    name: "NEU #",
+    name: "NEUT #",
     unit: "10^9/L",
-    aliases: [/\bneu\s*#/i, /neutrophil(?:s)?\s*#/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*9\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
+    aliases: [/\bneut?\s*[#＃]/i, /neutrophil(?:s)?\s*[#＃]/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*9|10\s*⁹)\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
   },
   {
     key: "lym_percent",
@@ -260,7 +263,7 @@ const definitions: Definition[] = [
     name: "LYM #",
     unit: "10^9/L",
     aliases: [/\blym\s*#/i, /lymphocyte(?:s)?\s*#/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*9\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*9|10\s*⁹)\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
   },
   {
     key: "mono_percent",
@@ -274,7 +277,7 @@ const definitions: Definition[] = [
     name: "MONO #",
     unit: "10^9/L",
     aliases: [/\bmono\s*#/i, /monocyte(?:s)?\s*#/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*9\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*9|10\s*⁹)\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
   },
   {
     key: "eos_percent",
@@ -288,7 +291,7 @@ const definitions: Definition[] = [
     name: "EOS #",
     unit: "10^9/L",
     aliases: [/\beos\s*#/i, /eosinophil(?:s)?\s*#/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*9\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*9|10\s*⁹)\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
   },
   {
     key: "baso_percent",
@@ -302,7 +305,7 @@ const definitions: Definition[] = [
     name: "BASO #",
     unit: "10^9/L",
     aliases: [/\bbaso\s*#/i, /basophil(?:s)?\s*#/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*9\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*9|10\s*⁹)\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
   },
   {
     key: "luc_percent",
@@ -316,7 +319,7 @@ const definitions: Definition[] = [
     name: "LUC #",
     unit: "10^9/L",
     aliases: [/\bluc\s*#/i, /large\s*unstained\s*cell(?:s)?\s*#/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*9\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*9|10\s*⁹)\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
   },
   {
     key: "ig_percent",
@@ -330,7 +333,7 @@ const definitions: Definition[] = [
     name: "IG #",
     unit: "10^9/L",
     aliases: [/\big\s*#/i, /immature\s*granulocyte(?:s)?\s*#/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*9\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*9|10\s*⁹)\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
   },
   {
     key: "chcm",
@@ -380,7 +383,7 @@ const definitions: Definition[] = [
     name: "NRBC #",
     unit: "10^9/L",
     aliases: [/\bnrbc\s*#/i],
-    unitAliases: [/[x×]?\s*10\s*\^?\s*9\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
+    unitAliases: [/(?:[x×]?\s*10\s*\^?\s*9|10\s*⁹)\s*[/\\]\s*l/i, /g\s*[/\\]\s*l/i],
   },
   {
     key: "mpv",
@@ -395,6 +398,13 @@ const definitions: Definition[] = [
     unit: "%",
     aliases: [/\bpdw\b/i],
     unitAliases: [/%[a-z]?/i],
+  },
+  {
+    key: "pct",
+    name: "PCT",
+    unit: "%",
+    aliases: [/\bpct\b/i, /plateletcrit/i],
+    unitAliases: [/%[a-z]*/i],
   },
   {
     key: "afp",
@@ -420,6 +430,22 @@ const definitions: Definition[] = [
 ];
 
 function findDate(text: string) {
+  const vietnameseDate = text.match(
+    /ngày\s+([0-2]?\d|3[01])\s+tháng\s+(0?[1-9]|1[0-2])\s+năm\s+(20\d{2})/i,
+  );
+  if (vietnameseDate) {
+    const day = Number(vietnameseDate[1]);
+    const month = Number(vietnameseDate[2]);
+    const year = Number(vietnameseDate[3]);
+    const date = new Date(year, month - 1, day, 12, 0, 0, 0);
+    if (
+      date.getFullYear() === year &&
+      date.getMonth() === month - 1 &&
+      date.getDate() === day
+    ) {
+      return date.toISOString();
+    }
+  }
   const patterns = [
     /\b(20\d{2})[./-](0?[1-9]|1[0-2])[./-]([0-2]?\d|3[01])\b/,
     /\b([0-2]?\d|3[01])[./-](0?[1-9]|1[0-2])[./-](20\d{2}|\d{2})\b/,
@@ -443,6 +469,225 @@ function findDate(text: string) {
     }
   }
   return null;
+}
+
+function matchingDefinitions(line: string) {
+  return definitions.filter((definition) =>
+    definition.aliases.some((alias) => alias.test(line)),
+  );
+}
+
+type DefinitionOccurrence = {
+  definition: Definition;
+  index: number;
+  end: number;
+  text: string;
+};
+
+function definitionOccurrences(text: string) {
+  const byKey = new Map<string, DefinitionOccurrence>();
+  for (const definition of definitions) {
+    for (const alias of definition.aliases) {
+      const match = text.match(alias);
+      if (!match || match.index === undefined) continue;
+      const occurrence = {
+        definition,
+        index: match.index,
+        end: match.index + match[0].length,
+        text: match[0],
+      };
+      const current = byKey.get(definition.key);
+      if (
+        !current ||
+        occurrence.index < current.index ||
+        (occurrence.index === current.index && occurrence.text.length > current.text.length)
+      ) {
+        byKey.set(definition.key, occurrence);
+      }
+    }
+  }
+
+  const ordered = [...byKey.values()].sort(
+    (left, right) => left.index - right.index || right.text.length - left.text.length,
+  );
+  const withoutOverlaps: DefinitionOccurrence[] = [];
+  for (const occurrence of ordered) {
+    const previous = withoutOverlaps.at(-1);
+    if (!previous || occurrence.index >= previous.end) {
+      withoutOverlaps.push(occurrence);
+      continue;
+    }
+    if (occurrence.text.length > previous.text.length) {
+      withoutOverlaps[withoutOverlaps.length - 1] = occurrence;
+    }
+  }
+  return withoutOverlaps;
+}
+
+function flattenedLabelRun(text: string) {
+  const occurrences = definitionOccurrences(text);
+  let best: DefinitionOccurrence[] = [];
+  let current: DefinitionOccurrence[] = [];
+  for (const occurrence of occurrences) {
+    const previous = current.at(-1);
+    if (
+      !previous ||
+      !containsNumberPattern.test(text.slice(previous.end, occurrence.index))
+    ) {
+      current.push(occurrence);
+    } else {
+      if (current.length > best.length) best = current;
+      current = [occurrence];
+    }
+  }
+  if (current.length > best.length) best = current;
+  return best.length >= 3 ? best : [];
+}
+
+function firstUnitMatch(text: string, definition: Definition) {
+  return definition.unitAliases
+    .map((pattern) => text.match(pattern))
+    .filter((match): match is RegExpMatchArray => Boolean(match) && match?.index !== undefined)
+    .sort((left, right) => (left.index ?? 0) - (right.index ?? 0))[0];
+}
+
+/** Reconstructs a table when OCR returns the entire page as one long line. */
+function parseFlattenedColumnarLine(line: string) {
+  const labels = flattenedLabelRun(line);
+  if (!labels.length) return { keys: new Set<string>(), results: [] as ParsedLabResult[] };
+
+  const data = line.slice(labels.at(-1)!.end);
+  const numberMatches = [...data.matchAll(numberPattern)];
+  if (numberMatches.length < labels.length) {
+    return { keys: new Set<string>(), results: [] as ParsedLabResult[] };
+  }
+  const values = numberMatches.slice(0, labels.length);
+  const lastValue = values.at(-1)!;
+  const afterValuesIndex = (lastValue.index ?? 0) + lastValue[0].length;
+  const afterValues = data.slice(afterValuesIndex);
+  const ranges = [
+    ...afterValues.matchAll(new RegExp(rangePattern.source, "gi")),
+  ].slice(0, labels.length);
+  const lastRange = ranges.at(-1);
+  const unitsText = lastRange
+    ? afterValues.slice((lastRange.index ?? 0) + lastRange[0].length)
+    : afterValues;
+
+  let unitCursor = 0;
+  const units = labels.map(({ definition }) => {
+    const match = firstUnitMatch(unitsText.slice(unitCursor), definition);
+    if (!match) return null;
+    unitCursor += (match.index ?? 0) + match[0].length;
+    return match[0];
+  });
+
+  const results = labels.flatMap(({ definition, text }, offset) => {
+    const parts = [text, values[offset][0]];
+    if (ranges[offset]) parts.push(ranges[offset][0]);
+    if (units[offset]) parts.push(units[offset]!);
+    const result = parseLine(parts.join(" "), definition);
+    return result ? [result] : [];
+  });
+  return {
+    keys: new Set(labels.map(({ definition }) => definition.key)),
+    results,
+  };
+}
+
+function standaloneDefinition(line: string) {
+  for (const definition of definitions) {
+    for (const alias of definition.aliases) {
+      const match = line.match(alias);
+      if (!match || match.index === undefined) continue;
+      const remainder = `${line.slice(0, match.index)}${line.slice(match.index + match[0].length)}`
+        .replace(/[\s:;,.()\[\]_*\-–—]+/g, "");
+      if (!remainder) return definition;
+    }
+  }
+  return null;
+}
+
+function isReferenceCell(line: string) {
+  return rangePattern.test(line) || /(?:<|≤|>|≥)\s*[-+]?\d/.test(line);
+}
+
+function isResultCell(line: string) {
+  const value = line.match(containsNumberPattern);
+  if (!value || value.index === undefined) return false;
+  const range = line.match(rangePattern);
+  return !range || range.index !== value.index;
+}
+
+function findColumnStart(
+  lines: string[],
+  start: number,
+  count: number,
+  predicate: (line: string, offset: number) => boolean,
+) {
+  const lastStart = Math.min(lines.length - count, start + 12);
+  for (let candidate = start; candidate <= lastStart; candidate += 1) {
+    let valid = true;
+    for (let offset = 0; offset < count; offset += 1) {
+      if (!predicate(lines[candidate + offset], offset)) {
+        valid = false;
+        break;
+      }
+    }
+    if (valid) return candidate;
+  }
+  return -1;
+}
+
+/**
+ * OCR engines often serialize a table column-by-column: all analyte names first,
+ * followed by all results, ranges, then units. Rebuild those rows positionally so
+ * every child analyte keeps its own value.
+ */
+function parseColumnarBlocks(lines: string[]) {
+  const parsed: ParsedLabResult[] = [];
+  for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+    const labels: { definition: Definition; line: string }[] = [];
+    let cursor = lineIndex;
+    while (cursor < lines.length) {
+      const definition = standaloneDefinition(lines[cursor]);
+      if (!definition || labels.some((item) => item.definition.key === definition.key)) break;
+      labels.push({ definition, line: lines[cursor] });
+      cursor += 1;
+    }
+    if (labels.length < 2) continue;
+
+    const valueStart = findColumnStart(
+      lines,
+      cursor,
+      labels.length,
+      (line) => isResultCell(line) && matchingDefinitions(line).length === 0,
+    );
+    if (valueStart < 0) continue;
+    const afterValues = valueStart + labels.length;
+    const rangeStart = findColumnStart(
+      lines,
+      afterValues,
+      labels.length,
+      (line) => isReferenceCell(line),
+    );
+    const afterRanges = rangeStart < 0 ? afterValues : rangeStart + labels.length;
+    const unitStart = findColumnStart(
+      lines,
+      afterRanges,
+      labels.length,
+      (line, offset) => labels[offset].definition.unitAliases.some((pattern) => pattern.test(line)),
+    );
+
+    labels.forEach(({ definition, line }, offset) => {
+      const parts = [line, lines[valueStart + offset]];
+      if (rangeStart >= 0) parts.push(lines[rangeStart + offset]);
+      if (unitStart >= 0) parts.push(lines[unitStart + offset]);
+      const result = parseLine(parts.join(" "), definition);
+      if (result) parsed.push(result);
+    });
+    lineIndex = cursor - 1;
+  }
+  return parsed;
 }
 
 function explicitStatus(line: string): ParsedLabStatus {
@@ -540,21 +785,35 @@ export function parseMedicalText(text: string): ParsedMedicalDocument {
   const candidates = new Map<string, ParsedLabResult>();
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
     const line = lines[lineIndex];
+    const flattened = parseFlattenedColumnarLine(line);
     for (const definition of definitions) {
+      if (flattened.keys.has(definition.key)) continue;
       let parsed = parseLine(line, definition);
       if (!parsed && definition.aliases.some((alias) => alias.test(line))) {
         const nextLine = lines[lineIndex + 1];
-        if (nextLine && numberPattern.test(nextLine)) {
-          numberPattern.lastIndex = 0;
+        if (
+          nextLine &&
+          containsNumberPattern.test(nextLine) &&
+          matchingDefinitions(nextLine).length === 0
+        ) {
           parsed = parseLine(`${line} ${nextLine}`, definition);
         }
-        numberPattern.lastIndex = 0;
       }
       if (!parsed) continue;
       const current = candidates.get(parsed.key);
       if (!current || parsed.confidence > current.confidence)
         candidates.set(parsed.key, parsed);
     }
+    for (const parsed of flattened.results) {
+      const current = candidates.get(parsed.key);
+      if (!current || parsed.confidence > current.confidence)
+        candidates.set(parsed.key, parsed);
+    }
+  }
+  for (const parsed of parseColumnarBlocks(lines)) {
+    const current = candidates.get(parsed.key);
+    if (!current || parsed.confidence > current.confidence)
+      candidates.set(parsed.key, parsed);
   }
   return {
     detectedDate: findDate(text),

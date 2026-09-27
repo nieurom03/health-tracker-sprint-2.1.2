@@ -113,21 +113,24 @@ export default function NewDocumentScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.heroEyebrow}>SPRINT 3</Text>
-        <Text style={styles.heroTitle}>Thêm tài liệu y tế</Text>
-        <Text style={styles.heroText}>File sẽ được sao chép vào vùng lưu trữ nội bộ của ứng dụng.</Text>
+        <View style={styles.heroBadge}><Text style={styles.heroBadgeText}>OCR</Text><Text style={styles.heroBadgeCaption}>OFFLINE</Text></View>
+        <Text style={styles.heroTitle}>Quét tài liệu y tế</Text>
+        <Text style={styles.heroText}>Chụp ảnh hoặc chọn PDF. Tài liệu được lưu và nhận dạng ngay trên thiết bị.</Text>
       </View>
 
-      <Text style={styles.label}>Gắn với bệnh nhân</Text>
-      <View style={styles.chips}>
-        {patients.map(patient => (
-          <Pressable key={patient.id} style={[styles.chip, patientId === patient.id && styles.chipActive]} onPress={() => setPatientId(patient.id)}>
-            <Text style={[styles.chipText, patientId === patient.id && styles.chipTextActive]}>{patient.name}</Text>
-          </Pressable>
-        ))}
+      <View style={styles.sectionHeading}><Text style={styles.label}>BỆNH NHÂN</Text><Text style={styles.step}>1 / 2</Text></View>
+      <View style={styles.patientCard}>
+        <Text style={styles.patientPrompt}>Tài liệu này thuộc hồ sơ nào?</Text>
+        <View style={styles.chips}>
+          {patients.map(patient => (
+            <Pressable key={patient.id} style={[styles.chip, patientId === patient.id && styles.chipActive]} onPress={() => setPatientId(patient.id)}>
+              <Text style={[styles.chipText, patientId === patient.id && styles.chipTextActive]}>{patient.name}</Text>
+            </Pressable>
+          ))}
+        </View>
       </View>
 
-      <Text style={styles.label}>Nguồn tài liệu</Text>
+      <View style={styles.sectionHeading}><Text style={styles.label}>CHỌN NGUỒN TÀI LIỆU</Text><Text style={styles.step}>2 / 2</Text></View>
       <View style={styles.sourceGrid}>
         <Pressable style={styles.source} onPress={takePhoto}>
           <AppIcon ios="camera.fill" android="photo_camera" size={27} style={styles.sourceSymbol}/><Text style={styles.sourceTitle}>Chụp giấy</Text><Text style={styles.sourceText}>Dùng camera</Text>
@@ -159,7 +162,7 @@ export default function NewDocumentScreen() {
       <Pressable style={[styles.save, (!pending || saving) && styles.disabled]} disabled={!pending || saving} onPress={save}>
         {saving ? <ActivityIndicator color="#fff" /> : <Text style={styles.primaryText}>Lưu vào Document Inbox</Text>}
       </Pressable>
-      <Text style={styles.notice}>Dữ liệu chỉ được lưu trên thiết bị. OCR và đọc nội dung tài liệu thuộc các sprint sau.</Text>
+      <Text style={styles.notice}>Dữ liệu chỉ được lưu trên thiết bị. Sau khi lưu, bạn có thể mở tài liệu và chạy OCR để kiểm tra, chỉnh sửa trước khi tạo chỉ số.</Text>
     </ScrollView>
   );
 }
@@ -169,24 +172,30 @@ const baseStyles = StyleSheet.create({
   center: { flex: 1, justifyContent: 'center', padding: 24, gap: 12, backgroundColor: '#F8FAFC' },
   emptyTitle: { fontSize: 22, fontWeight: '900', color: '#0F172A', textAlign: 'center' },
   emptyText: { color: '#64748B', textAlign: 'center', lineHeight: 20 },
-  hero: { backgroundColor: '#0F172A', borderRadius: 24, padding: 20, marginBottom: 4 },
-  heroEyebrow: { fontSize: 11, fontWeight: '900', letterSpacing: 1, color: '#93C5FD' },
+  hero: { backgroundColor: '#0F172A', borderRadius: 25, padding: 22, marginBottom: 5, shadowColor: '#0F172A', shadowOpacity: 0.18, shadowRadius: 14, shadowOffset: { width: 0, height: 7 }, elevation: 4 },
+  heroBadge: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', gap: 6, marginBottom: 10 },
+  heroBadgeText: { color: '#0F172A', backgroundColor: '#93C5FD', borderRadius: 7, paddingHorizontal: 8, paddingVertical: 4, fontSize: 10, fontWeight: '900', letterSpacing: 1 },
+  heroBadgeCaption: { fontSize: 10, fontWeight: '900', letterSpacing: 1.2, color: '#93C5FD' },
   heroTitle: { fontSize: 24, fontWeight: '900', color: '#fff', marginTop: 5 },
   heroText: { fontSize: 12, lineHeight: 18, color: '#CBD5E1', marginTop: 5 },
-  label: { fontSize: 12, fontWeight: '900', color: '#475569', marginTop: 10, textTransform: 'uppercase', letterSpacing: 0.5 },
+  sectionHeading: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 },
+  label: { fontSize: 11, fontWeight: '900', color: '#475569', letterSpacing: 0.7 },
+  step: { fontSize: 10, fontWeight: '900', color: '#94A3B8' },
+  patientCard: { backgroundColor: '#fff', borderRadius: 18, borderWidth: 1, borderColor: '#E2E8F0', padding: 14, gap: 10, shadowColor: '#0F172A', shadowOpacity: 0.05, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 2 },
+  patientPrompt: { color: '#64748B', fontSize: 12, lineHeight: 17 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: { paddingHorizontal: 13, paddingVertical: 10, borderRadius: 99, backgroundColor: '#fff', borderWidth: 1, borderColor: '#E2E8F0' },
   chipActive: { backgroundColor: '#2563EB', borderColor: '#2563EB' },
   chipText: { fontSize: 12, fontWeight: '800', color: '#475569' },
   chipTextActive: { color: '#fff' },
   sourceGrid: { flexDirection: 'row', gap: 8 },
-  source: { flex: 1, minHeight: 112, padding: 12, borderRadius: 18, backgroundColor: '#fff', borderWidth: 1, borderColor: '#E2E8F0', justifyContent: 'center', alignItems: 'center' },
+  source: { flex: 1, minHeight: 122, padding: 12, borderRadius: 18, backgroundColor: '#fff', borderWidth: 1, borderColor: '#E2E8F0', justifyContent: 'center', alignItems: 'center', shadowColor: '#0F172A', shadowOpacity: 0.04, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 1 },
   sourceIcon: { fontSize: 25, color: '#2563EB', fontWeight: '900', marginBottom: 7 },
   sourceSymbol: { marginBottom: 7 },
   pdf: { fontSize: 13, color: '#DC2626', backgroundColor: '#FEF2F2', paddingHorizontal: 7, paddingVertical: 6, borderRadius: 7 },
   sourceTitle: { fontSize: 12, fontWeight: '900', color: '#0F172A', textAlign: 'center' },
   sourceText: { fontSize: 9, color: '#94A3B8', marginTop: 3, textAlign: 'center' },
-  previewCard: { marginTop: 8, padding: 12, borderRadius: 18, backgroundColor: '#fff', borderWidth: 1, borderColor: '#BFDBFE', flexDirection: 'row', alignItems: 'center', gap: 12 },
+  previewCard: { marginTop: 8, padding: 13, borderRadius: 18, backgroundColor: '#EFF6FF', borderWidth: 1, borderColor: '#BFDBFE', flexDirection: 'row', alignItems: 'center', gap: 12, shadowColor: '#2563EB', shadowOpacity: 0.08, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 2 },
   thumbnail: { width: 58, height: 68, borderRadius: 11, backgroundColor: '#E2E8F0' },
   pdfPreview: { width: 58, height: 68, borderRadius: 11, backgroundColor: '#FEF2F2', alignItems: 'center', justifyContent: 'center' },
   pdfPreviewText: { color: '#DC2626', fontWeight: '900' },
@@ -196,7 +205,7 @@ const baseStyles = StyleSheet.create({
   fileSize: { fontSize: 10, color: '#94A3B8', marginTop: 3 },
   remove: { color: '#DC2626', fontSize: 12, fontWeight: '900', padding: 6 },
   primary: { backgroundColor: '#2563EB', padding: 16, borderRadius: 15, alignItems: 'center' },
-  save: { marginTop: 12, backgroundColor: '#2563EB', padding: 16, borderRadius: 16, alignItems: 'center', minHeight: 52 },
+  save: { marginTop: 12, backgroundColor: '#2563EB', padding: 16, borderRadius: 16, alignItems: 'center', minHeight: 54, shadowColor: '#2563EB', shadowOpacity: 0.23, shadowRadius: 10, shadowOffset: { width: 0, height: 5 }, elevation: 3 },
   disabled: { opacity: 0.45 },
   primaryText: { color: '#fff', fontWeight: '900', fontSize: 14 },
   notice: { fontSize: 10, color: '#94A3B8', lineHeight: 16, textAlign: 'center', marginTop: 3 },

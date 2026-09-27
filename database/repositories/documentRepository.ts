@@ -101,12 +101,24 @@ export async function updateDocumentOcrText(
   db: SQLiteDatabase,
   id: number,
   rawText: string,
+  metadata?: {
+    documentDate: string | null;
+    hospital: string | null;
+    doctor: string | null;
+  },
 ) {
   return db.runAsync(
     `UPDATE documents
-     SET ocr_text = ?, updated_at = CURRENT_TIMESTAMP
+     SET ocr_text = ?,
+       document_date = CASE WHEN document_date IS NULL OR trim(document_date) = '' THEN ? ELSE document_date END,
+       hospital = CASE WHEN hospital IS NULL OR trim(hospital) = '' THEN ? ELSE hospital END,
+       doctor = CASE WHEN doctor IS NULL OR trim(doctor) = '' THEN ? ELSE doctor END,
+       updated_at = CURRENT_TIMESTAMP
      WHERE id = ?`,
     rawText,
+    metadata?.documentDate ?? null,
+    metadata?.hospital?.trim() || null,
+    metadata?.doctor?.trim() || null,
     id,
   );
 }

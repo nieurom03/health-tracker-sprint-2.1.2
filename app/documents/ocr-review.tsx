@@ -27,6 +27,7 @@ import {
   updateDocumentOcrText,
 } from "@/database/repositories/documentRepository";
 import type { HealthDocument } from "@/types/health";
+import { parseDocumentMetadata } from "@/utils/documentMetadataParser";
 import { materializeDocument } from "@/utils/protectedFile";
 
 type ReviewState = "loading" | "scanning" | "ready" | "error";
@@ -177,7 +178,8 @@ export default function OcrReviewScreen() {
     setSaving(true);
     try {
       const reviewedText = draft.trim();
-      await updateDocumentOcrText(db, item.id, reviewedText);
+      const metadata = parseDocumentMetadata(reviewedText);
+      await updateDocumentOcrText(db, item.id, reviewedText, metadata);
       allowLeave.current = true;
       router.replace({
         pathname: "/documents/medical-review",
@@ -229,12 +231,19 @@ export default function OcrReviewScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.hero}>
-          <Text style={styles.eyebrow}>SPRINT 4.1 · OFFLINE</Text>
-          <Text style={styles.title}>Kiểm tra nội dung OCR</Text>
+          <View style={styles.heroBadge}><Text style={styles.heroBadgeText}>OCR</Text><Text style={styles.heroBadgeCaption}>OFFLINE · TRÊN THIẾT BỊ</Text></View>
+          <Text style={styles.title}>Review văn bản</Text>
           <Text style={styles.subtitle}>
-            Sửa các ký tự nhận dạng chưa đúng trước khi lưu. Nội dung không rời
-            khỏi thiết bị.
+            Kiểm tra và sửa nội dung nhận dạng trước khi lưu. Dữ liệu không rời khỏi thiết bị.
           </Text>
+        </View>
+
+        <View style={styles.progressCard}>
+          <View style={styles.progressStep}><View style={styles.progressDot}><Text style={styles.progressDotText}>1</Text></View><Text style={styles.progressText}>Tài liệu</Text></View>
+          <View style={styles.progressLine} />
+          <View style={styles.progressStep}><View style={[styles.progressDot, styles.progressDotActive]}><Text style={styles.progressDotText}>2</Text></View><Text style={styles.progressTextActive}>OCR</Text></View>
+          <View style={styles.progressLine} />
+          <View style={styles.progressStep}><View style={styles.progressDot}><Text style={styles.progressDotText}>3</Text></View><Text style={styles.progressText}>Chỉ số</Text></View>
         </View>
 
         {item && (
@@ -372,6 +381,9 @@ const baseStyles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: "#F8FAFC" },
   container: { padding: 18, paddingBottom: 48, gap: 14 },
   hero: { backgroundColor: "#0F172A", borderRadius: 22, padding: 20 },
+  heroBadge: { flexDirection: "row", alignItems: "center", gap: 7, marginBottom: 10 },
+  heroBadgeText: { color: "#0F172A", backgroundColor: "#93C5FD", borderRadius: 7, paddingHorizontal: 8, paddingVertical: 4, fontSize: 10, fontWeight: "900", letterSpacing: 1 },
+  heroBadgeCaption: { color: "#93C5FD", fontSize: 10, fontWeight: "900", letterSpacing: 1 },
   eyebrow: {
     color: "#60A5FA",
     fontSize: 10,
@@ -380,6 +392,14 @@ const baseStyles = StyleSheet.create({
   },
   title: { color: "#fff", fontSize: 23, fontWeight: "900", marginTop: 6 },
   subtitle: { color: "#CBD5E1", fontSize: 12, lineHeight: 18, marginTop: 8 },
+  progressCard: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: "#FFFFFF", borderRadius: 17, borderWidth: 1, borderColor: "#E2E8F0", paddingHorizontal: 13, paddingVertical: 11 },
+  progressStep: { alignItems: "center", gap: 4 },
+  progressDot: { width: 24, height: 24, borderRadius: 12, backgroundColor: "#E2E8F0", alignItems: "center", justifyContent: "center" },
+  progressDotActive: { backgroundColor: "#2563EB" },
+  progressDotText: { color: "#64748B", fontSize: 10, fontWeight: "900" },
+  progressText: { color: "#94A3B8", fontSize: 9, fontWeight: "800" },
+  progressTextActive: { color: "#2563EB", fontSize: 9, fontWeight: "900" },
+  progressLine: { flex: 1, height: 1, backgroundColor: "#CBD5E1", marginHorizontal: 7, marginBottom: 14 },
   documentCard: {
     flexDirection: "row",
     alignItems: "center",
