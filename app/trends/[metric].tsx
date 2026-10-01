@@ -42,6 +42,24 @@ export default function TrendScreen() {
       delta != null && previous?.value ? (delta / previous.value) * 100 : null,
     [delta, previous],
   );
+  const reference = useMemo(() => {
+    const source = [...data]
+      .reverse()
+      .find(
+        (item) => item.reference_min != null || item.reference_max != null,
+      );
+    return {
+      min: source?.reference_min ?? null,
+      max: source?.reference_max ?? null,
+    };
+  }, [data]);
+  const hasReference = reference.min != null || reference.max != null;
+  const isOutsideReference = useCallback(
+    (value: number) =>
+      (reference.min != null && value < reference.min) ||
+      (reference.max != null && value > reference.max),
+    [reference.max, reference.min],
+  );
   const width = Math.min(Dimensions.get("window").width - 36, 430);
 
   if (!latest)
@@ -96,41 +114,115 @@ export default function TrendScreen() {
 
       <GlassCard style={styles.chart} borderRadius={20}>
         <View style={styles.chartHeader}>
-          <Text style={styles.chartTitle}>Biến động theo thời gian</Text>
+          <View>
+            <Text style={styles.chartTitle}>Lịch sử theo ngày</Text>
+            <Text style={styles.chartSubtitle}>Mỗi cột là một kết quả</Text>
+          </View>
           <Text style={styles.count}>{data.length} lần đo</Text>
         </View>
-        <TrendChart data={data} width={width - 32} />
+        {hasReference ? (
+          <View style={styles.referenceCard}>
+            <View style={styles.referenceTitleRow}>
+              <View style={styles.referenceSwatch} />
+              <Text style={styles.referenceTitle}>Vùng tham chiếu cố định</Text>
+            </View>
+            <View style={styles.referenceValues}>
+              <View style={styles.referenceValueBox}>
+                <Text style={styles.referenceLabel}>TỪ</Text>
+                <Text style={styles.referenceValue}>
+                  {reference.min ?? "—"} {latest.unit}
+                </Text>
+              </View>
+              <View style={styles.referenceDivider} />
+              <View style={styles.referenceValueBox}>
+                <Text style={styles.referenceLabel}>ĐẾN</Text>
+                <Text style={styles.referenceValue}>
+                  {reference.max ?? "—"} {latest.unit}
+                </Text>
+              </View>
+            </View>
+          </View>
+        ) : (
+          <Text style={styles.noReference}>
+            Chỉ số này chưa có khoảng tham chiếu được lưu.
+          </Text>
+        )}
+        <TrendChart
+          data={data}
+          width={width - 32}
+          referenceMin={reference.min}
+          referenceMax={reference.max}
+        />
+        <View style={styles.legend}>
+          {hasReference ? (
+            <>
+              <View style={styles.legendItem}>
+                <View style={[styles.legendDot, styles.legendGreen]} />
+                <Text style={styles.legendText}>Trong vùng</Text>
+              </View>
+              <View style={styles.legendItem}>
+                <View style={[styles.legendDot, styles.legendRed]} />
+                <Text style={styles.legendText}>Ngoài vùng</Text>
+              </View>
+            </>
+          ) : (
+            <View style={styles.legendItem}>
+              <View style={[styles.legendDot, styles.legendBlue]} />
+              <Text style={styles.legendText}>Kết quả theo ngày</Text>
+            </View>
+          )}
+        </View>
       </GlassCard>
 
       <Text style={styles.heading}>Lịch sử</Text>
-      {[...data].reverse().map((x) => (
-        <GlassCard
-          key={`${x.source}-${x.id}`}
-          style={styles.row}
-          borderRadius={14}
-          onPress={() =>
-            router.push({
-              pathname: "/records/[source]/[id]",
-              params: { source: x.source, id: x.id },
-            })
-          }
-        >
-          <View>
-            <Text style={styles.date}>{formatDateTime(x.measured_at)}</Text>
-            {x.notes && (
-              <Text style={styles.notes} numberOfLines={1}>
-                {x.notes}
+      {[...data].reverse().map((x) => {
+        const outside = hasReference && isOutsideReference(x.value);
+        return (
+          <GlassCard
+            key={`${x.source}-${x.id}`}
+            style={styles.row}
+            borderRadius={14}
+            onPress={() =>
+              router.push({
+                pathname: "/records/[source]/[id]",
+                params: { source: x.source, id: x.id },
+              })
+            }
+          >
+            <View>
+              <View style={styles.historyDateRow}>
+                <View
+                  style={[
+                    styles.historyDot,
+                    hasReference
+                      ? outside
+                        ? styles.historyDotOutside
+                        : styles.historyDotInside
+                      : styles.historyDotUnknown,
+                  ]}
+                />
+                <Text style={styles.date}>{formatDateTime(x.measured_at)}</Text>
+              </View>
+              {x.notes && (
+                <Text style={styles.notes} numberOfLines={1}>
+                  {x.notes}
+                </Text>
+              )}
+            </View>
+            <View style={styles.historyRight}>
+              <Text style={[styles.value, outside && styles.valueOutside]}>
+                {formatMetricValue(x.value, x.value2)} {x.unit}
               </Text>
-            )}
-          </View>
-          <View style={styles.historyRight}>
-            <Text style={styles.value}>
-              {formatMetricValue(x.value, x.value2)} {x.unit}
-            </Text>
-            <Text style={styles.edit}>Sửa ›</Text>
-          </View>
-        </GlassCard>
-      ))}
+              {hasReference && (
+                <Text style={outside ? styles.outsideText : styles.insideText}>
+                  {outside ? "Ngoài khoảng" : "Trong khoảng"}
+                </Text>
+              )}
+              <Text style={styles.edit}>Sửa ›</Text>
+            </View>
+          </GlassCard>
+        );
+      })}
 
       <Text style={styles.notice}>
         Biểu đồ chỉ thể hiện xu hướng của dữ liệu đã nhập và không thay thế đánh
@@ -188,7 +280,68 @@ const baseStyles = StyleSheet.create({
     justifyContent: "space-between",
   },
   chartTitle: { fontSize: 13, fontWeight: "900", color: "#334155" },
+  chartSubtitle: { fontSize: 9, color: "#94A3B8", marginTop: 2 },
   count: { fontSize: 10, color: "#94A3B8", fontWeight: "800" },
+  referenceCard: {
+    width: "100%",
+    backgroundColor: "#F0FDF4",
+    borderWidth: 1,
+    borderColor: "#BBF7D0",
+    borderRadius: 14,
+    padding: 11,
+    gap: 8,
+    marginTop: 2,
+  },
+  referenceTitleRow: { flexDirection: "row", alignItems: "center", gap: 7 },
+  referenceSwatch: {
+    width: 22,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#22C55E",
+    opacity: 0.45,
+  },
+  referenceTitle: { color: "#166534", fontSize: 10, fontWeight: "900" },
+  referenceValues: { flexDirection: "row", alignItems: "center" },
+  referenceValueBox: { flex: 1 },
+  referenceDivider: {
+    width: 1,
+    height: 28,
+    backgroundColor: "#BBF7D0",
+    marginHorizontal: 12,
+  },
+  referenceLabel: {
+    color: "#16A34A",
+    fontSize: 8,
+    fontWeight: "900",
+    letterSpacing: 0.7,
+  },
+  referenceValue: {
+    color: "#14532D",
+    fontSize: 14,
+    fontWeight: "900",
+    marginTop: 2,
+  },
+  noReference: {
+    width: "100%",
+    color: "#64748B",
+    fontSize: 10,
+    backgroundColor: "#F8FAFC",
+    borderRadius: 10,
+    padding: 10,
+  },
+  legend: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 16,
+    marginTop: -5,
+  },
+  legendItem: { flexDirection: "row", alignItems: "center", gap: 5 },
+  legendDot: { width: 8, height: 8, borderRadius: 4 },
+  legendGreen: { backgroundColor: "#16A34A" },
+  legendRed: { backgroundColor: "#EF4444" },
+  legendBlue: { backgroundColor: "#2563EB" },
+  legendText: { color: "#64748B", fontSize: 9, fontWeight: "800" },
   heading: { fontSize: 18, fontWeight: "900", color: "#0F172A", marginTop: 4 },
   row: {
     padding: 14,
@@ -197,9 +350,27 @@ const baseStyles = StyleSheet.create({
     alignItems: "center",
   },
   date: { color: "#64748B", fontSize: 12, fontWeight: "700" },
+  historyDateRow: { flexDirection: "row", alignItems: "center", gap: 7 },
+  historyDot: { width: 8, height: 8, borderRadius: 4 },
+  historyDotInside: { backgroundColor: "#16A34A" },
+  historyDotOutside: { backgroundColor: "#EF4444" },
+  historyDotUnknown: { backgroundColor: "#2563EB" },
   notes: { color: "#94A3B8", fontSize: 10, marginTop: 3, maxWidth: 190 },
   historyRight: { alignItems: "flex-end" },
   value: { fontSize: 15, fontWeight: "900", color: "#0F172A" },
+  valueOutside: { color: "#DC2626" },
+  insideText: {
+    color: "#16A34A",
+    fontSize: 9,
+    fontWeight: "900",
+    marginTop: 3,
+  },
+  outsideText: {
+    color: "#DC2626",
+    fontSize: 9,
+    fontWeight: "900",
+    marginTop: 3,
+  },
   edit: { color: "#2563EB", fontWeight: "800", fontSize: 11, marginTop: 4 },
   notice: {
     fontSize: 11,

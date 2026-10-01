@@ -53,8 +53,12 @@ export type ClinicalKind = 'diagnosis' | 'history' | 'allergy' | 'prescription' 
 export type ClinicalEntry = {
   id: number;
   patient_id: number;
+  document_id: number | null;
   kind: ClinicalKind;
   title: string;
+  content: string | null;
+  interpretation: string | null;
+  symptoms: string | null;
   details: string | null;
   event_date: string | null;
   facility: string | null;

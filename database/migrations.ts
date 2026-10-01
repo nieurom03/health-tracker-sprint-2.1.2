@@ -82,15 +82,20 @@ export async function migrateDb(db: SQLiteDatabase) {
     CREATE TABLE IF NOT EXISTS clinical_entries (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       patient_id INTEGER NOT NULL,
+      document_id INTEGER,
       kind TEXT NOT NULL,
       title TEXT NOT NULL,
+      content TEXT,
+      interpretation TEXT,
+      symptoms TEXT,
       details TEXT,
       event_date TEXT,
       facility TEXT,
       clinician TEXT,
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY(patient_id) REFERENCES patients(id) ON DELETE CASCADE
+      FOREIGN KEY(patient_id) REFERENCES patients(id) ON DELETE CASCADE,
+      FOREIGN KEY(document_id) REFERENCES documents(id) ON DELETE SET NULL
     );
 
     CREATE TABLE IF NOT EXISTS reminders (
@@ -178,5 +183,28 @@ export async function migrateDb(db: SQLiteDatabase) {
   await db.execAsync('UPDATE medications SET updated_at = COALESCE(updated_at, created_at)');
   await db.execAsync(
     'CREATE INDEX IF NOT EXISTS idx_medications_patient_status ON medications(patient_id, status)',
+  );
+
+  const clinicalColumns = await db.getAllAsync<{ name: string }>(
+    'PRAGMA table_info(clinical_entries)',
+  );
+  const existingClinicalColumns = new Set(
+    clinicalColumns.map(column => column.name),
+  );
+  const clinicalAdditions = [
+    ['document_id', 'INTEGER REFERENCES documents(id) ON DELETE SET NULL'],
+    ['content', 'TEXT'],
+    ['interpretation', 'TEXT'],
+    ['symptoms', 'TEXT'],
+  ] as const;
+  for (const [name, definition] of clinicalAdditions) {
+    if (!existingClinicalColumns.has(name)) {
+      await db.execAsync(
+        `ALTER TABLE clinical_entries ADD COLUMN ${name} ${definition}`,
+      );
+    }
+  }
+  await db.execAsync(
+    'CREATE UNIQUE INDEX IF NOT EXISTS idx_clinical_document ON clinical_entries(document_id) WHERE document_id IS NOT NULL',
   );
 }

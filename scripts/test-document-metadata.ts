@@ -1,7 +1,10 @@
 // @ts-nocheck -- Executed directly by Node 22 with type stripping.
 import assert from "node:assert/strict";
 
-import { parseDocumentMetadata } from "../utils/documentMetadataParser.ts";
+import {
+  parseClinicalNarrative,
+  parseDocumentMetadata,
+} from "../utils/documentMetadataParser.ts";
 
 const dhaReport = `PHÒNG KHÁM ĐA KHOA DHA HEALTHCARE 221-221 Bis Nguyễn Thị Minh Khai, P. Nguyễn Cư Trinh, Q. 01, TP.HCM Hotline: 19001115
 PHIẾU KẾT QUẢ XÉT NGHIỆM
@@ -32,5 +35,19 @@ const flattened = parseDocumentMetadata(
 assert.equal(flattened.documentDate, "2026-08-15");
 assert.equal(flattened.hospital, "PHÒNG KHÁM HOÀN MỸ");
 assert.equal(flattened.doctor, "Trần Thị Bình");
+
+assert.deepEqual(
+  parseClinicalNarrative(
+    "Lý do khám: Đau đầu và chóng mặt Chẩn đoán: Theo dõi tăng huyết áp Bác sĩ: Nguyễn Văn An",
+  ),
+  {
+    interpretation: "Theo dõi tăng huyết áp",
+    symptoms: "Đau đầu và chóng mặt",
+  },
+);
+assert.deepEqual(parseClinicalNarrative(dhaReport), {
+  interpretation: null,
+  symptoms: null,
+});
 
 console.log("Document metadata parser OK: ngày khám, cơ sở và bác sĩ.");

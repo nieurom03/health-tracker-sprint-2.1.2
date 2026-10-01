@@ -23,6 +23,10 @@ import {
 } from "@/database/repositories/metricRepository";
 import type { HealthDocument } from "@/types/health";
 import {
+  parseClinicalNarrative,
+  parseDocumentMetadata,
+} from "@/utils/documentMetadataParser";
+import {
   labStatus,
   parseMedicalText,
   type ParsedLabResult,
@@ -49,6 +53,43 @@ function documentDate(item: HealthDocument, detectedDate: string | null) {
   if (detectedDate) return new Date(detectedDate);
   if (item.document_date) return new Date(`${item.document_date}T12:00:00`);
   return new Date(item.created_at);
+}
+
+function clinicalContent(results: LabDraft[]) {
+  return results
+    .map((draft) => {
+      const min = optionalNumber(draft.referenceMinText);
+      const max = optionalNumber(draft.referenceMaxText);
+      const reference =
+        min === undefined && max === undefined
+          ? "chưa có khoảng tham chiếu"
+          : `tham chiếu ${min ?? "—"}–${max ?? "—"}`;
+      return `${draft.name}: ${numberValue(draft.valueText)} ${draft.unit.trim()} (${reference})`;
+    })
+    .join("\n");
+}
+
+function resultInterpretation(results: LabDraft[]) {
+  const outside = results.flatMap((draft) => {
+    const value = numberValue(draft.valueText);
+    const min = optionalNumber(draft.referenceMinText) ?? null;
+    const max = optionalNumber(draft.referenceMaxText) ?? null;
+    const status = labStatus(value, min, max);
+    if (status !== "high" && status !== "low") return [];
+    return [
+      `${draft.name} ${status === "high" ? "cao hơn" : "thấp hơn"} khoảng tham chiếu (${value} ${draft.unit.trim()})`,
+    ];
+  });
+  if (outside.length) {
+    return `Đối chiếu dữ liệu: ${outside.join("; ")}. Đây chỉ là mô tả kết quả, không phải chẩn đoán.`;
+  }
+  const withReference = results.some(
+    (draft) =>
+      draft.referenceMinText.trim() || draft.referenceMaxText.trim(),
+  );
+  return withReference
+    ? "Các chỉ số đã chọn nằm trong khoảng tham chiếu được lưu. Đây chỉ là mô tả kết quả, không phải chẩn đoán."
+    : "Chưa đủ khoảng tham chiếu để diễn giải các chỉ số đã chọn. Đây không phải chẩn đoán.";
 }
 
 export default function MedicalReviewScreen() {
@@ -167,6 +208,14 @@ export default function MedicalReviewScreen() {
     }
     setSaving(true);
     try {
+      const ocrText = item.ocr_text ?? "";
+      const narrative = parseClinicalNarrative(ocrText);
+      const metadata = parseDocumentMetadata(ocrText);
+      const automaticInterpretation = resultInterpretation(selected);
+      const interpretation = narrative.interpretation
+        ? `${narrative.interpretation}\n\n${automaticInterpretation}`
+        : automaticInterpretation;
+      const content = clinicalContent(selected);
       await replaceDocumentLabResults(db, {
         documentId: item.id,
         patientId: item.patient_id,
@@ -182,13 +231,30 @@ export default function MedicalReviewScreen() {
           notes: `Tự động từ tài liệu: ${item.file_name}`,
           sourceLine: draft.sourceLine,
         })),
+        clinicalEntry: {
+          title: `Kết quả xét nghiệm · ${item.file_name}`,
+          content,
+          interpretation,
+          symptoms: narrative.symptoms ?? undefined,
+          details: `Tự động tạo từ tài liệu ${item.file_name}. Nội dung cần được đối chiếu với tài liệu gốc.`,
+          facility: item.hospital ?? metadata.hospital ?? undefined,
+          clinician: item.doctor ?? metadata.doctor ?? undefined,
+        },
       });
       allowLeave.current = true;
       Alert.alert(
         "Đã cập nhật Health Tracker",
-        `${selected.length} chỉ số đã được tạo từ tài liệu và sẽ xuất hiện trên Dashboard/Timeline.`,
+        `${selected.length} chỉ số và hồ sơ bệnh án đã được cập nhật từ tài liệu.`,
         [
           { text: "Về tài liệu", onPress: () => router.back() },
+          {
+            text: "Xem hồ sơ",
+            onPress: () =>
+              router.replace({
+                pathname: "/clinical",
+                params: { patientId: String(item.patient_id) },
+              }),
+          },
           { text: "Xem Dashboard", onPress: () => router.replace("/") },
         ],
       );

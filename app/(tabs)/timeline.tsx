@@ -18,6 +18,13 @@ import AppIcon from "@/components/AppIcon";
 
 type Filter = "all" | MetricSource;
 
+function isOutsideReference(item: MetricPoint) {
+  return (
+    (item.reference_min != null && item.value < item.reference_min) ||
+    (item.reference_max != null && item.value > item.reference_max)
+  );
+}
+
 export default function TimelineScreen() {
   const styles = useThemedStyles(baseStyles);
   const db = useSQLiteContext();
@@ -124,40 +131,59 @@ export default function TimelineScreen() {
               <Text style={styles.dateHeader}>
                 {formatDate(group[0].measured_at)}
               </Text>
-              {group.map((item) => (
-                <GlassCard
-                  key={`${item.source}-${item.id}`}
-                  style={styles.row}
-                  borderRadius={17}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/records/[source]/[id]",
-                      params: { source: item.source, id: item.id },
-                    })
-                  }
-                >
-                  <View
-                    style={[styles.dot, item.source === "lab" && styles.labDot]}
+              {group.map((item) => {
+                const outside = isOutsideReference(item);
+                return (
+                  <GlassCard
+                    key={`${item.source}-${item.id}`}
+                    style={[styles.row, outside && styles.rowOutside]}
+                    borderRadius={17}
+                    onPress={() =>
+                      router.push({
+                        pathname: "/records/[source]/[id]",
+                        params: { source: item.source, id: item.id },
+                      })
+                    }
                   >
-                    <Text style={styles.dotText}>
-                      {item.source === "lab" ? "L" : "V"}
-                    </Text>
-                  </View>
-                  <View style={styles.info}>
-                    <Text style={styles.name}>{item.metric_name}</Text>
-                    <Text style={styles.meta}>
-                      {formatTime(item.measured_at)}
-                      {item.notes ? `  ·  ${item.notes}` : ""}
-                    </Text>
-                  </View>
-                  <View style={styles.right}>
-                    <Text style={styles.value}>
-                      {formatMetricValue(item.value, item.value2)}
-                    </Text>
-                    <Text style={styles.unit}>{item.unit} ›</Text>
-                  </View>
-                </GlassCard>
-              ))}
+                    <View
+                      style={[
+                        styles.dot,
+                        item.source === "lab" && styles.labDot,
+                        outside && styles.outsideDot,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.dotText,
+                          outside && styles.outsideDotText,
+                        ]}
+                      >
+                        {outside ? "!" : item.source === "lab" ? "L" : "V"}
+                      </Text>
+                    </View>
+                    <View style={styles.info}>
+                      <Text style={[styles.name, outside && styles.outsideName]}>
+                        {item.metric_name}
+                      </Text>
+                      <Text style={styles.meta}>
+                        {formatTime(item.measured_at)}
+                        {item.notes ? `  ·  ${item.notes}` : ""}
+                      </Text>
+                      {outside && (
+                        <Text style={styles.outsideLabel}>Ngoài khoảng tham chiếu</Text>
+                      )}
+                    </View>
+                    <View style={styles.right}>
+                      <Text style={[styles.value, outside && styles.outsideValue]}>
+                        {formatMetricValue(item.value, item.value2)}
+                      </Text>
+                      <Text style={[styles.unit, outside && styles.outsideUnit]}>
+                        {item.unit} ›
+                      </Text>
+                    </View>
+                  </GlassCard>
+                );
+              })}
             </View>
           ))
         )}
@@ -234,6 +260,10 @@ const baseStyles = StyleSheet.create({
     alignItems: "center",
     gap: 11,
   },
+  rowOutside: {
+    borderColor: "rgba(248, 113, 113, 0.55)",
+    backgroundColor: "rgba(254, 242, 242, 0.9)",
+  },
   dot: {
     width: 34,
     height: 34,
@@ -248,12 +278,26 @@ const baseStyles = StyleSheet.create({
     backgroundColor: "rgba(236, 253, 245, 0.9)",
     borderColor: "rgba(167, 243, 208, 0.6)",
   },
+  outsideDot: {
+    backgroundColor: "#FEE2E2",
+    borderColor: "#FCA5A5",
+  },
   dotText: { fontSize: 11, fontWeight: "900", color: "#2563EB" },
+  outsideDotText: { color: "#DC2626" },
   info: { flex: 1 },
   name: { fontSize: 14, fontWeight: "900", color: "#0F172A" },
+  outsideName: { color: "#B91C1C" },
   meta: { fontSize: 10, color: "#94A3B8", marginTop: 4, maxWidth: 180 },
+  outsideLabel: {
+    color: "#DC2626",
+    fontSize: 9,
+    fontWeight: "900",
+    marginTop: 3,
+  },
   right: { alignItems: "flex-end" },
   value: { fontSize: 16, fontWeight: "900", color: "#0F172A" },
+  outsideValue: { color: "#DC2626" },
   unit: { fontSize: 10, color: "#94A3B8", marginTop: 3, fontWeight: "700" },
+  outsideUnit: { color: "#EF4444" },
   tip: { fontSize: 11, color: "#94A3B8", textAlign: "center", marginTop: 10 },
 });

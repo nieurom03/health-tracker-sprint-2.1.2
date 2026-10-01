@@ -4,6 +4,11 @@ export type ParsedDocumentMetadata = {
   doctor: string | null;
 };
 
+export type ParsedClinicalNarrative = {
+  interpretation: string | null;
+  symptoms: string | null;
+};
+
 type DateCandidate = {
   value: string;
   index: number;
@@ -147,10 +152,75 @@ function detectedDoctor(text: string) {
   return null;
 }
 
+const clinicalBoundary =
+  /\s+(?:triệu\s*chứng|lý\s*do\s*(?:khám|vào\s*viện)|bệnh\s*sử|kết\s*luận|chẩn\s*đoán|nhận\s*xét|diễn\s*giải|hướng\s*điều\s*trị|bác\s*s[ĩỹ]|cơ\s*sở|bệnh\s*viện|phòng\s*khám|ngày|tên\s*xét\s*nghiệm|kết\s*quả|đơn\s*vị|tham\s*chiếu)\s*:?/i;
+
+function extractClinicalValue(text: string, labelSources: string[]) {
+  const lines = text
+    .replace(/\r/g, "\n")
+    .split(/\n+/)
+    .map((line) => line.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+  const labelPattern = new RegExp(
+    `(?:^|\\b)(?:${labelSources.join("|")})\\s*[:\\-]\\s*(.*)$`,
+    "i",
+  );
+  for (let index = 0; index < lines.length; index += 1) {
+    const match = lines[index].match(labelPattern);
+    if (!match) continue;
+    let candidate = cleanMetadataValue(match[1] ?? "");
+    const boundaryIndex = candidate.search(clinicalBoundary);
+    if (boundaryIndex >= 0) candidate = cleanMetadataValue(candidate.slice(0, boundaryIndex));
+    if (!candidate) {
+      const nextLine = lines[index + 1] ?? "";
+      if (
+        nextLine &&
+        !labelPattern.test(nextLine) &&
+        !clinicalBoundary.test(` ${nextLine}`) &&
+        !/^[A-ZÀ-Ỹ\s/()#%]{5,}$/.test(nextLine)
+      ) {
+        candidate = cleanMetadataValue(nextLine);
+      }
+    }
+    if (candidate.length >= 2) return candidate.slice(0, 800);
+  }
+
+  const flat = text.replace(/\s+/g, " ").trim();
+  const flatPattern = new RegExp(
+    `(?:^|\\b)(?:${labelSources.join("|")})\\s*[:\\-]\\s*`,
+    "i",
+  );
+  const match = flat.match(flatPattern);
+  if (!match || match.index === undefined) return null;
+  const tail = flat.slice(match.index + match[0].length, match.index + match[0].length + 900);
+  const boundaryIndex = tail.search(clinicalBoundary);
+  const candidate = cleanMetadataValue(
+    tail.slice(0, boundaryIndex >= 0 ? boundaryIndex : 800),
+  );
+  return candidate.length >= 2 ? candidate : null;
+}
+
 export function parseDocumentMetadata(text: string): ParsedDocumentMetadata {
   return {
     documentDate: detectedDocumentDate(text),
     hospital: detectedHospital(text),
     doctor: detectedDoctor(text),
+  };
+}
+
+export function parseClinicalNarrative(text: string): ParsedClinicalNarrative {
+  return {
+    interpretation: extractClinicalValue(text, [
+      "kết\\s*luận",
+      "chẩn\\s*đoán",
+      "nhận\\s*xét",
+      "diễn\\s*giải",
+    ]),
+    symptoms: extractClinicalValue(text, [
+      "triệu\\s*chứng",
+      "lý\\s*do\\s*khám",
+      "lý\\s*do\\s*vào\\s*viện",
+      "bệnh\\s*sử",
+    ]),
   };
 }

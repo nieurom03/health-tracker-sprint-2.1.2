@@ -1,5 +1,6 @@
 import type { SQLiteDatabase } from "expo-sqlite";
 import type { MetricPoint, MetricSource } from "@/types/health";
+import { upsertDocumentClinicalEntry } from "@/database/repositories/clinicalRepository";
 
 export const VITAL_TYPES = [
   {
@@ -370,6 +371,15 @@ export async function replaceDocumentLabResults(
     patientId: number;
     testedAt: string;
     results: DocumentLabInput[];
+    clinicalEntry?: {
+      title: string;
+      content: string;
+      interpretation?: string;
+      symptoms?: string;
+      details?: string;
+      facility?: string;
+      clinician?: string;
+    };
   },
 ) {
   await db.withTransactionAsync(async () => {
@@ -391,6 +401,14 @@ export async function replaceDocumentLabResults(
         testedAt: input.testedAt,
         notes: result.notes,
         sourceLine: result.sourceLine,
+      });
+    }
+    if (input.clinicalEntry) {
+      await upsertDocumentClinicalEntry(db, {
+        documentId: input.documentId,
+        patientId: input.patientId,
+        eventDate: input.testedAt,
+        ...input.clinicalEntry,
       });
     }
   });
@@ -423,11 +441,32 @@ export async function getTimeline(
 }
 
 export async function getLatestMetrics(db: SQLiteDatabase, patientId: number) {
-  const all = await getTimeline(db, patientId, 500);
-  const map = new Map<string, MetricPoint>();
-  for (const item of all)
-    if (!map.has(item.metric_key)) map.set(item.metric_key, item);
-  return Array.from(map.values());
+  return db.getAllAsync<MetricPoint>(
+    `SELECT v.id, v.patient_id, v.type AS metric_key,
+       CASE v.type WHEN 'blood_pressure' THEN 'Huyết áp' WHEN 'heart_rate' THEN 'Nhịp tim' WHEN 'weight' THEN 'Cân nặng' WHEN 'height' THEN 'Chiều cao' WHEN 'temperature' THEN 'Nhiệt độ' WHEN 'spo2' THEN 'SpO₂' ELSE v.type END AS metric_name,
+       v.value1 AS value, v.value2, v.unit, v.measured_at, 'vital' AS source, v.notes,
+       NULL AS document_id, NULL AS document_name, NULL AS source_line, NULL AS reference_min, NULL AS reference_max, NULL AS reference_text
+     FROM vital_signs v
+     WHERE v.patient_id = ? AND NOT EXISTS (
+       SELECT 1 FROM vital_signs newer
+       WHERE newer.patient_id = v.patient_id AND newer.type = v.type
+         AND (newer.measured_at > v.measured_at OR (newer.measured_at = v.measured_at AND newer.id > v.id))
+     )
+     UNION ALL
+     SELECT l.id, l.patient_id, COALESCE(l.test_code, lower(l.test_name)) AS metric_key, l.test_name AS metric_name,
+       l.value, NULL AS value2, l.unit, l.tested_at AS measured_at, 'lab' AS source, l.notes,
+       l.document_id, d.file_name AS document_name, l.source_line, l.reference_min, l.reference_max, l.reference_text
+     FROM lab_results l LEFT JOIN documents d ON d.id = l.document_id
+     WHERE l.patient_id = ? AND NOT EXISTS (
+       SELECT 1 FROM lab_results newer
+       WHERE newer.patient_id = l.patient_id
+         AND COALESCE(newer.test_code, lower(newer.test_name)) = COALESCE(l.test_code, lower(l.test_name))
+         AND (newer.tested_at > l.tested_at OR (newer.tested_at = l.tested_at AND newer.id > l.id))
+     )
+     ORDER BY measured_at DESC, id DESC`,
+    patientId,
+    patientId,
+  );
 }
 
 export async function getMetricHistory(

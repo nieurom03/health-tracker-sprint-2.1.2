@@ -18,20 +18,68 @@ export async function listClinicalEntries(db: SQLiteDatabase, patientId: number)
 
 export async function saveClinicalEntry(
   db: SQLiteDatabase,
-  input: { id?: number; patientId: number; kind: ClinicalKind; title: string; details?: string; eventDate?: string; facility?: string; clinician?: string },
+  input: { id?: number; patientId: number; kind: ClinicalKind; title: string; content?: string; interpretation?: string; symptoms?: string; details?: string; eventDate?: string; facility?: string; clinician?: string },
 ) {
   if (input.id) {
     return db.runAsync(
-      `UPDATE clinical_entries SET kind=?, title=?, details=?, event_date=?, facility=?, clinician=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`,
-      input.kind, input.title.trim(), input.details?.trim() || null, input.eventDate || null,
+      `UPDATE clinical_entries SET kind=?, title=?, content=?, interpretation=?, symptoms=?, details=?, event_date=?, facility=?, clinician=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`,
+      input.kind, input.title.trim(), input.content?.trim() || null,
+      input.interpretation?.trim() || null, input.symptoms?.trim() || null,
+      input.details?.trim() || null, input.eventDate || null,
       input.facility?.trim() || null, input.clinician?.trim() || null, input.id,
     );
   }
   return db.runAsync(
-    `INSERT INTO clinical_entries(patient_id, kind, title, details, event_date, facility, clinician)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`, input.patientId, input.kind, input.title.trim(),
-    input.details?.trim() || null, input.eventDate || null, input.facility?.trim() || null,
+    `INSERT INTO clinical_entries(patient_id, kind, title, content, interpretation, symptoms, details, event_date, facility, clinician)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, input.patientId, input.kind, input.title.trim(),
+    input.content?.trim() || null, input.interpretation?.trim() || null,
+    input.symptoms?.trim() || null, input.details?.trim() || null,
+    input.eventDate || null, input.facility?.trim() || null,
     input.clinician?.trim() || null,
+  );
+}
+
+export async function upsertDocumentClinicalEntry(
+  db: SQLiteDatabase,
+  input: {
+    documentId: number;
+    patientId: number;
+    title: string;
+    content: string;
+    interpretation?: string;
+    symptoms?: string;
+    details?: string;
+    eventDate: string;
+    facility?: string;
+    clinician?: string;
+  },
+) {
+  const existing = await db.getFirstAsync<{ id: number }>(
+    'SELECT id FROM clinical_entries WHERE document_id = ?',
+    input.documentId,
+  );
+  if (existing) {
+    return db.runAsync(
+      `UPDATE clinical_entries
+       SET patient_id=?, kind='visit', title=?, content=?, interpretation=?, symptoms=?,
+         details=?, event_date=?, facility=?, clinician=?, updated_at=CURRENT_TIMESTAMP
+       WHERE id=?`,
+      input.patientId, input.title.trim(), input.content.trim(),
+      input.interpretation?.trim() || null, input.symptoms?.trim() || null,
+      input.details?.trim() || null, input.eventDate,
+      input.facility?.trim() || null, input.clinician?.trim() || null,
+      existing.id,
+    );
+  }
+  return db.runAsync(
+    `INSERT INTO clinical_entries(
+       patient_id, document_id, kind, title, content, interpretation, symptoms,
+       details, event_date, facility, clinician
+     ) VALUES (?, ?, 'visit', ?, ?, ?, ?, ?, ?, ?, ?)`,
+    input.patientId, input.documentId, input.title.trim(), input.content.trim(),
+    input.interpretation?.trim() || null, input.symptoms?.trim() || null,
+    input.details?.trim() || null, input.eventDate,
+    input.facility?.trim() || null, input.clinician?.trim() || null,
   );
 }
 
